@@ -54,10 +54,24 @@ private:
    */
   void prepare_time(time_t const &when, struct tm *ptm);
 
-  /**
-   * Performs the actual calculations.
-   */
-  double calculate_irradiance(struct tm *t);
+  double julian_century(double _julian_day);
+  double mean_long_sun(double _julian_century);
+  double mean_anom_sun(double _julian_century);
+  double sun_eq_of_centre(double _mean_anom_sun, double _julian_century);
+  double eccent_earth_orbit(double _julian_century);
+  double var_y(double _obliq_corr);
+  double mean_obliq_ecliptic(double _julian_century);
+  double sun_true_long(double _mean_long_sun, double _sun_eq_of_centre);
+  double obliq_corr(double _mean_obliq_ecliptic, double _julian_century);
+  double sun_app_long(double _sun_true_long, double _julian_century);
+  double declination(double _obliq_corr, double _sun_app_long);
+  double eq_of_time(double _var_y, double _mean_long_sun,
+                    double _eccent_earth_orbit, double _mean_anom_sun);
+  double true_solar_time(double _declination, double _eq_of_time);
+  double hour_angle(double _declination, double _eq_of_time,
+                    double _true_solar_time);
+  double solar_zenith(double _declination, double _hour_angle);
+  double solar_elevation(double _solar_zenith);
 };
 
 #endif
