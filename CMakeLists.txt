@@ -3,7 +3,10 @@ set(CMAKE_CXX_STANDARD 11)
 
 project(libdaylight)
 include(cmake/WriteVersionInfo.cmake)
-set(BUILD_SHARED_LIBS ON)
+
+if(NOT DEFINED MSVC)
+    set(BUILD_SHARED_LIBS ON)
+endif()
 
 enable_testing()
 
