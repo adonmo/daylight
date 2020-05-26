@@ -16,6 +16,5 @@ time_t datetime(int year, int month, int day, int hour, int minute,
   timeinfo.tm_hour = hour;
   timeinfo.tm_min = minute;
   timeinfo.tm_sec = second;
-  timeinfo.tm_gmtoff = 0;
   return mktime(&timeinfo) - offset;
 }

@@ -5,7 +5,8 @@
 
 class Sunclock {
 public:
-  Sunclock(double const &latitude_, double const &longitude_);
+  Sunclock(double const &latitude_, double const &longitude_,
+           double const &tz_offset = 0);
 
   /**
    * \overload double Sunclock::irradiance(time_t const &when)
@@ -68,11 +69,13 @@ private:
   // in decimal degrees, north is positive
   double const longitude;
 
-  // percentage past midnight, i.e. noon  is 0.5
-  double time_of_day;
-
   // in hours, east is positive, i.e. IST (+05:30) is 5.5
-  double timezone;
+  double const tz_offset;
+
+  /**
+   * @return percentage past midnight, i.e. noon  is 0.5
+   */
+  double time_of_day(struct tm *t);
 
   static int days_since_1900(struct tm *t);
 
@@ -90,7 +93,7 @@ private:
    *
    * @param t
    * @param time_of_day percentage past midnight, i.e. noon is 0.5
-   * @param timezone    in hours, i.e. IST (+05:30) is 5.5
+   * @param timezone    in hours, east is positive, i.e. IST (+05:30) is 5.5
    * @return julian day
    */
   static double julian_day(struct tm *t, double const &time_of_day,
@@ -114,7 +117,8 @@ private:
   double declination(double _obliq_corr, double _sun_app_long);
   double eq_of_time(double _var_y, double _mean_long_sun,
                     double _eccent_earth_orbit, double _mean_anom_sun);
-  double true_solar_time(double _declination, double _eq_of_time);
+  double true_solar_time(double _time_of_day, double _declination,
+                         double _eq_of_time);
   double hour_angle(double _declination, double _eq_of_time,
                     double _true_solar_time);
   double hour_angle_sunrise(double _declination);
