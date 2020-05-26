@@ -22,6 +22,45 @@ public:
    */
   double irradiance(time_t const &when);
 
+  /**
+   * \overload time_t Sunclock::sunrise(time_t const &date)
+   */
+  time_t sunrise();
+
+  /**
+   * Returns sunrise time for given date
+   *
+   * @param date only date is considered
+   * @return sunrise time
+   */
+  time_t sunrise(time_t const &date);
+
+  /**
+   * \overload time_t Sunclock::solar_noon(time_t const &date)
+   */
+  time_t solar_noon();
+
+  /**
+   * Returns solar_noon time for given date
+   *
+   * @param date only date is considered
+   * @return solar_noon time
+   */
+  time_t solar_noon(time_t const &date);
+
+  /**
+   * \overload time_t Sunclock::sunset(time_t const &date)
+   */
+  time_t sunset();
+
+  /**
+   * Returns sunset time for given date
+   *
+   * @param date only date is considered
+   * @return sunset time
+   */
+  time_t sunset(time_t const &date);
+
 private:
   // in decimal degrees, east is positive
   double const latitude;
@@ -36,6 +75,14 @@ private:
   double timezone;
 
   static int days_since_1900(struct tm *t);
+
+  /**
+   * @param date
+   * @param decimal_day decimal between 0.0 and 1.0, e.g. noon = 0.5
+   * @return time_t with date and time set accordingly
+   */
+  static time_t time_from_decimal_day(time_t const &date,
+                                      double const &decimal_day);
 
   /**
    * Get day count since Monday, January 1, 4713 BC
@@ -70,6 +117,7 @@ private:
   double true_solar_time(double _declination, double _eq_of_time);
   double hour_angle(double _declination, double _eq_of_time,
                     double _true_solar_time);
+  double hour_angle_sunrise(double _declination);
   double solar_zenith(double _declination, double _hour_angle);
   double solar_elevation(double _solar_zenith);
 };

@@ -2,14 +2,14 @@
 #include <libdaylight/Sunclock.hpp>
 #include <stdexcept>
 
-inline double rad(double radians) {
-  static const double pi_on_180 = 4.0 * atan(1.0) / 180.0;
-  return radians / pi_on_180;
+inline double rad(double degrees) {
+  static const double degToRad = 4.0 * atan(1.0) / 180.0;
+  return degrees * degToRad;
 }
 
-inline double deg(double degrees) {
-  static const double pi_on_180 = 4.0 * atan(1.0) / 180.0;
-  return degrees * pi_on_180;
+inline double deg(double radians) {
+  static const double radToDeg = 180.0 / (4.0 * atan(1.0));
+  return radians * radToDeg;
 }
 
 Sunclock::Sunclock(double const &latitude_, double const &longitude_)
@@ -38,7 +38,89 @@ double Sunclock::irradiance(time_t const &when) {
   double _true_solar_time = true_solar_time(_declination, _eq_of_time);
   double _hour_angle = hour_angle(_declination, _eq_of_time, _true_solar_time);
   double _solar_zenith = solar_zenith(_declination, _hour_angle);
-  return std::cos(deg(_solar_zenith));
+  return std::cos(rad(_solar_zenith));
+}
+
+time_t Sunclock::sunrise() { return sunrise(time(0)); }
+
+time_t Sunclock::sunrise(time_t const &date) {
+  struct tm *t = gmtime(&date);
+  prepare_time(date, t);
+
+  double _julian_day = julian_day(t, time_of_day, timezone);
+  double _julian_century = julian_century(_julian_day);
+  double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
+  double _mean_long_sun = mean_long_sun(_julian_century);
+  double _mean_anom_sun = mean_anom_sun(_julian_century);
+  double _sun_eq_of_centre = sun_eq_of_centre(_mean_anom_sun, _julian_century);
+  double _sun_true_long = sun_true_long(_mean_long_sun, _sun_eq_of_centre);
+  double _obliq_corr = obliq_corr(_mean_obliq_ecliptic, _julian_century);
+  double _sun_app_long = sun_app_long(_sun_true_long, _julian_century);
+  double _eccent_earth_orbit = eccent_earth_orbit(_julian_century);
+  double _var_y = var_y(_obliq_corr);
+  double _eq_of_time =
+      eq_of_time(_var_y, _mean_long_sun, _eccent_earth_orbit, _mean_anom_sun);
+  double _declination = declination(_obliq_corr, _sun_app_long);
+  double _hour_angle_sunrise = hour_angle_sunrise(_declination);
+
+  double noon_decimal_day =
+      (720 - 4 * longitude - _eq_of_time + timezone * 60) / 1440;
+  double decimal_day = noon_decimal_day - _hour_angle_sunrise * 4 / 1440;
+  return time_from_decimal_day(date, decimal_day);
+}
+
+time_t Sunclock::solar_noon() { return solar_noon(time(0)); }
+
+time_t Sunclock::solar_noon(time_t const &date) {
+  struct tm *t = gmtime(&date);
+  prepare_time(date, t);
+
+  double _julian_day = julian_day(t, time_of_day, timezone);
+  double _julian_century = julian_century(_julian_day);
+  double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
+  double _mean_long_sun = mean_long_sun(_julian_century);
+  double _mean_anom_sun = mean_anom_sun(_julian_century);
+  double _sun_eq_of_centre = sun_eq_of_centre(_mean_anom_sun, _julian_century);
+  double _sun_true_long = sun_true_long(_mean_long_sun, _sun_eq_of_centre);
+  double _obliq_corr = obliq_corr(_mean_obliq_ecliptic, _julian_century);
+  double _sun_app_long = sun_app_long(_sun_true_long, _julian_century);
+  double _eccent_earth_orbit = eccent_earth_orbit(_julian_century);
+  double _var_y = var_y(_obliq_corr);
+  double _eq_of_time =
+      eq_of_time(_var_y, _mean_long_sun, _eccent_earth_orbit, _mean_anom_sun);
+  double _declination = declination(_obliq_corr, _sun_app_long);
+
+  double decimal_day =
+      (720 - 4 * longitude - _eq_of_time + timezone * 60) / 1440;
+  return time_from_decimal_day(date, decimal_day);
+}
+
+time_t Sunclock::sunset() { return sunset(time(0)); }
+
+time_t Sunclock::sunset(time_t const &date) {
+  struct tm *t = gmtime(&date);
+  prepare_time(date, t);
+
+  double _julian_day = julian_day(t, time_of_day, timezone);
+  double _julian_century = julian_century(_julian_day);
+  double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
+  double _mean_long_sun = mean_long_sun(_julian_century);
+  double _mean_anom_sun = mean_anom_sun(_julian_century);
+  double _sun_eq_of_centre = sun_eq_of_centre(_mean_anom_sun, _julian_century);
+  double _sun_true_long = sun_true_long(_mean_long_sun, _sun_eq_of_centre);
+  double _obliq_corr = obliq_corr(_mean_obliq_ecliptic, _julian_century);
+  double _sun_app_long = sun_app_long(_sun_true_long, _julian_century);
+  double _eccent_earth_orbit = eccent_earth_orbit(_julian_century);
+  double _var_y = var_y(_obliq_corr);
+  double _eq_of_time =
+      eq_of_time(_var_y, _mean_long_sun, _eccent_earth_orbit, _mean_anom_sun);
+  double _declination = declination(_obliq_corr, _sun_app_long);
+  double _hour_angle_sunrise = hour_angle_sunrise(_declination);
+
+  double noon_decimal_day =
+      (720 - 4 * longitude - _eq_of_time + timezone * 60) / 1440;
+  double decimal_day = noon_decimal_day + _hour_angle_sunrise * 4 / 1440;
+  return time_from_decimal_day(date, decimal_day);
 }
 
 void Sunclock::prepare_time(time_t const &when, struct tm *t) {
@@ -48,13 +130,35 @@ void Sunclock::prepare_time(time_t const &when, struct tm *t) {
   timezone = offset / 3600;
 }
 
+time_t Sunclock::time_from_decimal_day(time_t const &date,
+                                       double const &decimal_day) {
+  struct std::tm epoch;
+  epoch.tm_isdst = 0;
+  epoch.tm_sec = epoch.tm_min = epoch.tm_hour = epoch.tm_mon = 0;
+  epoch.tm_mday = 1;
+  epoch.tm_year = 70;
+  time_t offset = mktime(&epoch);
+
+  struct tm *dt = gmtime(&date);
+  struct tm t = {0};
+  t.tm_year = dt->tm_year;
+  t.tm_mon = dt->tm_mon;
+  t.tm_mday = dt->tm_mday;
+  double hours = 24.0 * decimal_day;
+  t.tm_hour = int(hours);
+  double minutes = (hours - t.tm_hour) * 60;
+  t.tm_min = int(minutes);
+  double seconds = (minutes - t.tm_sec) * 60;
+  t.tm_sec = int(seconds);
+  return mktime(&t) - offset;
+}
+
 int Sunclock::days_since_1900(struct tm *t) {
   int year = t->tm_year;
-  if (year < 1900 || year > 2099) {
+  if (year < 0 || year > 199) {
     throw std::invalid_argument(
         "days_since_1900 - Date must be between 1900 and 2099");
   }
-  year -= 1900;
   int month = t->tm_mon + 1;
   int days = t->tm_mday;
 
@@ -90,12 +194,12 @@ double Sunclock::mean_anom_sun(double _julian_century) {
 
 double Sunclock::sun_eq_of_centre(double _mean_anom_sun,
                                   double _julian_century) {
-  return (sin(deg(_mean_anom_sun)) *
-              (1.914602 -
-               _julian_century * (0.004817 + 0.000014 * _julian_century)) +
-          sin(deg(2 * _mean_anom_sun)) *
-              (0.019993 - 0.000101 * _julian_century) +
-          sin(deg(3 * _mean_anom_sun)) * 0.000289);
+  return sin(rad(_mean_anom_sun)) *
+             (1.914602 -
+              _julian_century * (0.004817 + 0.000014 * _julian_century)) +
+         sin(rad(2 * _mean_anom_sun)) *
+             (0.019993 - 0.000101 * _julian_century) +
+         sin(rad(3 * _mean_anom_sun)) * 0.000289;
 };
 
 double Sunclock::sun_true_long(double _mean_long_sun,
@@ -109,7 +213,7 @@ double Sunclock::eccent_earth_orbit(double _julian_century) {
 };
 
 double Sunclock::var_y(double _obliq_corr) {
-  return tan(deg(_obliq_corr / 2)) * tan(deg(_obliq_corr / 2));
+  return tan(rad(_obliq_corr / 2)) * tan(rad(_obliq_corr / 2));
 };
 
 double Sunclock::mean_obliq_ecliptic(double _julian_century) {
@@ -133,18 +237,18 @@ double Sunclock::sun_app_long(double _sun_true_long, double _julian_century) {
 }
 
 double Sunclock::declination(double _obliq_corr, double _sun_app_long) {
-  return rad(asin(sin(deg(_obliq_corr)) * sin(deg(_sun_app_long))));
+  return deg(asin(sin(rad(_obliq_corr)) * sin(rad(_sun_app_long))));
 }
 
 double Sunclock::eq_of_time(double _var_y, double _mean_long_sun,
                             double _eccent_earth_orbit, double _mean_anom_sun) {
-  return 4 * rad(_var_y * sin(2 * deg(_mean_long_sun)) -
-                 2 * _eccent_earth_orbit * sin(deg(_mean_anom_sun)) +
-                 4 * _eccent_earth_orbit * _var_y * sin(deg(_mean_anom_sun)) *
-                     cos(2 * deg(_mean_long_sun)) -
-                 0.5 * _var_y * _var_y * sin(4 * deg(_mean_long_sun)) -
+  return 4 * deg(_var_y * sin(2 * rad(_mean_long_sun)) -
+                 2 * _eccent_earth_orbit * sin(rad(_mean_anom_sun)) +
+                 4 * _eccent_earth_orbit * _var_y * sin(rad(_mean_anom_sun)) *
+                     cos(2 * rad(_mean_long_sun)) -
+                 0.5 * _var_y * _var_y * sin(4 * rad(_mean_long_sun)) -
                  1.25 * _eccent_earth_orbit * _eccent_earth_orbit *
-                     sin(2 * deg(_mean_anom_sun)));
+                     sin(2 * rad(_mean_anom_sun)));
 }
 
 double Sunclock::true_solar_time(double _declination, double _eq_of_time) {
@@ -158,10 +262,16 @@ double Sunclock::hour_angle(double _declination, double _eq_of_time,
                                    : _true_solar_time / 4 - 180);
 }
 
+double Sunclock::hour_angle_sunrise(double _declination) {
+  return deg(
+      acos(cos(rad(90.833)) / (cos(rad(latitude)) * cos(rad(_declination))) -
+           tan(rad(latitude)) * tan(rad(_declination))));
+}
+
 double Sunclock::solar_zenith(double _declination, double _hour_angle) {
-  return rad(acos(sin(deg(latitude)) * sin(deg(_declination)) +
-                  cos(deg(latitude)) * cos(deg(_declination)) *
-                      cos(deg(_hour_angle))));
+  return deg(acos(sin(rad(latitude)) * sin(rad(_declination)) +
+                  cos(rad(latitude)) * cos(rad(_declination)) *
+                      cos(rad(_hour_angle))));
 }
 
 double Sunclock::solar_elevation(double _solar_zenith) {
