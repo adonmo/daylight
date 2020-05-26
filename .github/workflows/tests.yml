@@ -1,0 +1,51 @@
+name: Tests
+
+on: [push, pull_request]
+
+env:
+  CMAKE_VERSION: 3.16.2
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, ubuntu-latest, macOS-latest]
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Set up conda path
+      uses: goanpeca/setup-miniconda@v1
+
+    - name: Download Pybind11
+      run: conda install pybind11 -c conda-forge
+      # Use a bash shell so we can use the same syntax for environment variable
+      # access regardless of the host operating system
+      shell: bash -l {0}
+
+    - name: Create Build Environment
+      run: cmake -E make_directory ${{runner.workspace}}/daylight/build
+      shell: bash -l {0}
+
+    - name: Configure CMake
+      shell: bash -l {0}
+      working-directory: ${{runner.workspace}}/daylight/build
+      run: |
+        if [ "${{ matrix.os }}" != "windows-latest" ]; then
+          cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        else
+          cmake ..
+        fi
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/daylight/build
+      shell: bash -l {0}
+      run: cmake --build . --config $BUILD_TYPE
+
+    - name: Test
+      working-directory: ${{runner.workspace}}/daylight/build
+      shell: bash -l {0}
+      run: ./tests/libdaylight-tests

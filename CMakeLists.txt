@@ -1,7 +1,9 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16.2)
+set(CMAKE_CXX_STANDARD 11)
+
 project(libdaylight)
 include(cmake/WriteVersionInfo.cmake)
-SET(BUILD_SHARED_LIBS ON)
+set(BUILD_SHARED_LIBS ON)
 
 enable_testing()
 

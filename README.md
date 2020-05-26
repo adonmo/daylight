@@ -1,4 +1,4 @@
-daylight
+daylight ![Test Status](https://github.com/adonmo/daylight/workflows/Tests/badge.svg)
 ====
 
 daylight or libdaylight is a library which enables you to answer daylight related questions like:
