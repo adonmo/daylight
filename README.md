@@ -46,10 +46,9 @@ This should output:
 libdaylight uses the [CMake](https://cmake.org/) build system. Follow these steps to build the project:
 
 ```sh
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
+$ cmake -E make_directory build
+$ cmake -B build -S .
+$ cmake --build build
 ```
 
 This builds three artifacts:

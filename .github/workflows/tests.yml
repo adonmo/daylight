@@ -32,20 +32,15 @@ jobs:
 
     - name: Configure CMake
       shell: bash -l {0}
-      working-directory: ${{runner.workspace}}/daylight/build
-      run: |
-        if [ "${{ matrix.os }}" != "windows-latest" ]; then
-          cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-        else
-          cmake ..
-        fi
+      working-directory: ${{runner.workspace}}/daylight
+      run: cmake -B build -S .
 
     - name: Build
-      working-directory: ${{runner.workspace}}/daylight/build
+      working-directory: ${{runner.workspace}}/daylight
       shell: bash -l {0}
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build build --config $BUILD_TYPE
 
     - name: Test
-      working-directory: ${{runner.workspace}}/daylight/build
+      working-directory: ${{runner.workspace}}/daylight
       shell: bash -l {0}
-      run: ./tests/libdaylight-tests
+      run: ./build/tests/libdaylight-tests
