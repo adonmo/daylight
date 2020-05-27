@@ -75,7 +75,7 @@ private:
   /**
    * @return percentage past midnight, i.e. noon  is 0.5
    */
-  double time_of_day(struct tm *t);
+  double time_of_day(time_t date, double tz_offset);
 
   static int days_since_1900(struct tm *t);
 

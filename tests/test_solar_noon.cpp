@@ -11,6 +11,6 @@ TEST_CASE("Solar noon time is calculated with reasonable values",
 
   SECTION("Hyderabad solar noon times are calculated resonably") {
     REQUIRE(s.solar_noon(datetime(2020, 5, 21, 14, 10, 35)) ==
-            Approx(datetime(2020, 5, 21, 6, 42, 37)).margin(MINUTE));
+            Approx(datetime(2020, 5, 21, 12, 12, 37)).margin(MINUTE));
   }
 }

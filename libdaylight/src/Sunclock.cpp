@@ -1,4 +1,5 @@
 #include <cmath>
+#include <iostream>
 #include <libdaylight/Sunclock.hpp>
 #include <stdexcept>
 
@@ -20,7 +21,7 @@ double Sunclock::irradiance() { return irradiance(time(0)); }
 
 double Sunclock::irradiance(time_t const &when) {
   struct tm *t = gmtime(&when);
-  double _time_of_day = time_of_day(t);
+  double _time_of_day = time_of_day(when, tz_offset);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -46,7 +47,7 @@ time_t Sunclock::sunrise() { return sunrise(time(0)); }
 
 time_t Sunclock::sunrise(time_t const &date) {
   struct tm *t = gmtime(&date);
-  double _time_of_day = time_of_day(t);
+  double _time_of_day = time_of_day(date, tz_offset);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -73,7 +74,7 @@ time_t Sunclock::solar_noon() { return solar_noon(time(0)); }
 
 time_t Sunclock::solar_noon(time_t const &date) {
   struct tm *t = gmtime(&date);
-  double _time_of_day = time_of_day(t);
+  double _time_of_day = time_of_day(date, tz_offset);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -98,7 +99,7 @@ time_t Sunclock::sunset() { return sunset(time(0)); }
 
 time_t Sunclock::sunset(time_t const &date) {
   struct tm *t = gmtime(&date);
-  double _time_of_day = time_of_day(t);
+  double _time_of_day = time_of_day(date, tz_offset);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -121,7 +122,9 @@ time_t Sunclock::sunset(time_t const &date) {
   return time_from_decimal_day(date, decimal_day);
 }
 
-double Sunclock::time_of_day(struct tm *t) {
+double Sunclock::time_of_day(time_t date, double tz_offset) {
+  date = date + tz_offset * 60 * 60;
+  struct tm *t = gmtime(&date);
   return (t->tm_hour + t->tm_min / 60.0 + t->tm_sec / 3600.0) / 24.0;
 }
 

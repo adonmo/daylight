@@ -10,6 +10,6 @@ TEST_CASE("Sunset time is calculated with reasonable values", "[sunset]") {
 
   SECTION("Hyderabad sunset times are calculated resonably") {
     REQUIRE(s.sunset(datetime(2020, 5, 21, 14, 10, 35)) ==
-            Approx(datetime(2020, 5, 21, 13, 12, 46)).margin(MINUTE));
+            Approx(datetime(2020, 5, 21, 18, 42, 46)).margin(MINUTE));
   }
 }
