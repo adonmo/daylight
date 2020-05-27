@@ -1,4 +1,6 @@
-daylight ![Test Status](https://github.com/adonmo/daylight/workflows/Tests/badge.svg)
+![Test Status](https://github.com/adonmo/daylight/workflows/Tests/badge.svg)
+
+daylight
 ====
 
 daylight or libdaylight is a library which enables you to answer daylight related questions like:
@@ -46,7 +48,6 @@ This should output:
 libdaylight uses the [CMake](https://cmake.org/) build system. Follow these steps to build the project:
 
 ```sh
-$ cmake -E make_directory build
 $ cmake -B build -S .
 $ cmake --build build
 ```

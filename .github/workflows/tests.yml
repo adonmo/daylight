@@ -18,16 +18,14 @@ jobs:
     - uses: actions/checkout@v1
 
     - name: Set up conda path
+      # Using this would mean we should use bash -l {0} in all the other steps instead
+      # of just bash for the conda (and its packages) path to properly reflected
       uses: goanpeca/setup-miniconda@v1
 
     - name: Download Pybind11
       run: conda install pybind11 -c conda-forge
       # Use a bash shell so we can use the same syntax for environment variable
       # access regardless of the host operating system
-      shell: bash -l {0}
-
-    - name: Create Build Environment
-      run: cmake -E make_directory ${{runner.workspace}}/daylight/build
       shell: bash -l {0}
 
     - name: Configure CMake
