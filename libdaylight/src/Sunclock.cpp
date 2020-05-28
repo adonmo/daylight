@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 #include <libdaylight/Sunclock.hpp>
 #include <stdexcept>
 
@@ -19,9 +18,10 @@ Sunclock::Sunclock(double const &latitude_, double const &longitude_,
 
 double Sunclock::irradiance() { return irradiance(time(0)); }
 
-double Sunclock::irradiance(time_t const &when) {
+double Sunclock::irradiance(time_t when) {
+  when = when + tz_offset * 60 * 60;
   struct tm *t = gmtime(&when);
-  double _time_of_day = time_of_day(when, tz_offset);
+  double _time_of_day = time_of_day(when);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -45,9 +45,10 @@ double Sunclock::irradiance(time_t const &when) {
 
 time_t Sunclock::sunrise() { return sunrise(time(0)); }
 
-time_t Sunclock::sunrise(time_t const &date) {
+time_t Sunclock::sunrise(time_t date) {
+  date = date + tz_offset * 60 * 60;
   struct tm *t = gmtime(&date);
-  double _time_of_day = time_of_day(date, tz_offset);
+  double _time_of_day = time_of_day(date);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -67,14 +68,15 @@ time_t Sunclock::sunrise(time_t const &date) {
   double noon_decimal_day =
       (720 - 4 * longitude - _eq_of_time + tz_offset * 60) / 1440;
   double decimal_day = noon_decimal_day - _hour_angle_sunrise * 4 / 1440;
-  return time_from_decimal_day(date, decimal_day);
+  return time_from_decimal_day(date, decimal_day) - tz_offset * 60 * 60;
 }
 
 time_t Sunclock::solar_noon() { return solar_noon(time(0)); }
 
-time_t Sunclock::solar_noon(time_t const &date) {
+time_t Sunclock::solar_noon(time_t date) {
+  date = date + tz_offset * 60 * 60;
   struct tm *t = gmtime(&date);
-  double _time_of_day = time_of_day(date, tz_offset);
+  double _time_of_day = time_of_day(date);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -92,14 +94,15 @@ time_t Sunclock::solar_noon(time_t const &date) {
 
   double decimal_day =
       (720 - 4 * longitude - _eq_of_time + tz_offset * 60) / 1440;
-  return time_from_decimal_day(date, decimal_day);
+  return time_from_decimal_day(date, decimal_day) - tz_offset * 60 * 60;
 }
 
 time_t Sunclock::sunset() { return sunset(time(0)); }
 
-time_t Sunclock::sunset(time_t const &date) {
+time_t Sunclock::sunset(time_t date) {
+  date = date + tz_offset * 60 * 60;
   struct tm *t = gmtime(&date);
-  double _time_of_day = time_of_day(date, tz_offset);
+  double _time_of_day = time_of_day(date);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
   double _julian_century = julian_century(_julian_day);
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
@@ -119,23 +122,21 @@ time_t Sunclock::sunset(time_t const &date) {
   double noon_decimal_day =
       (720 - 4 * longitude - _eq_of_time + tz_offset * 60) / 1440;
   double decimal_day = noon_decimal_day + _hour_angle_sunrise * 4 / 1440;
-  return time_from_decimal_day(date, decimal_day);
+  return time_from_decimal_day(date, decimal_day) - tz_offset * 60 * 60;
 }
 
-double Sunclock::time_of_day(time_t date, double tz_offset) {
-  date = date + tz_offset * 60 * 60;
+double Sunclock::time_of_day(time_t date) {
   struct tm *t = gmtime(&date);
   return (t->tm_hour + t->tm_min / 60.0 + t->tm_sec / 3600.0) / 24.0;
 }
 
-time_t Sunclock::time_from_decimal_day(time_t const &date,
-                                       double const &decimal_day) {
+time_t Sunclock::time_from_decimal_day(time_t date, double decimal_day) {
   struct std::tm epoch;
   epoch.tm_isdst = 0;
   epoch.tm_sec = epoch.tm_min = epoch.tm_hour = epoch.tm_mon = 0;
   epoch.tm_mday = 1;
   epoch.tm_year = 70;
-  time_t offset = mktime(&epoch);
+  time_t local_tz_offset = mktime(&epoch);
 
   struct tm *dt = gmtime(&date);
   struct tm t = {0};
@@ -147,8 +148,8 @@ time_t Sunclock::time_from_decimal_day(time_t const &date,
   double minutes = (hours - t.tm_hour) * 60;
   t.tm_min = int(minutes);
   double seconds = (minutes - t.tm_sec) * 60;
-  t.tm_sec = int(seconds);
-  return mktime(&t) - offset;
+  t.tm_sec = int(seconds) % 60;
+  return mktime(&t) - local_tz_offset;
 }
 
 int Sunclock::days_since_1900(struct tm *t) {

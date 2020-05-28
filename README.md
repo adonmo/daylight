@@ -28,17 +28,30 @@ import pytz
 
 import daylight
 
-def epoch(year, month, day, hour=0, minute=0, second=0):
-    return int(datetime.datetime(year, month, day, hour, minute, second).replace(tzinfo=pytz.UTC).timestamp() * 1000)
+def epoch(year, month, day, hour=0, minute=0, second=0, tz=pytz.UTC):
+    return int(tz.localize(datetime.datetime(year, month, day, hour, minute, second)).timestamp())
 
+tz = pytz.timezone("Asia/Kolkata")
+tz_offset = tz.utcoffset(datetime.datetime.utcnow()).total_seconds() / 3600
 
-# Example with GPS coords for Hyderabad, India
-sun = daylight.Sunclock(17.3859, 78.4867)
-sun.irradiance(epoch(2020, 5, 21, 14, 10, 35))
-```
-This should output:
-```
-0.8827526
+# Example with GPS coords for Hyderabad, India, in Indian timezone (IST)
+sun = daylight.Sunclock(17.3859, 78.4867, tz_offset)
+
+# Know the daylight strength / ambient brightness level at a given time of day
+# Below call returns 0.882753920406182
+sun.irradiance(epoch(2020, 5, 21, 14, 10, 35, tz))
+
+# Know the sunrise time for a given date
+# Returns unix timestamp for 5:42 AM
+sun.sunrise(epoch(2020, 5, 21, tz=tz))
+
+# Know the solar noon time for a given date
+# Returns unix timestamp for 12:12 PM
+sun.solar_noon(epoch(2020, 5, 21, tz=tz))
+
+# Know the sunset time for a given date
+# Returns unix timestamp for 18:42 PM
+sun.sunset(epoch(2020, 5, 21, tz=tz))
 ```
 
 # Development

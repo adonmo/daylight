@@ -6,10 +6,10 @@
 class Sunclock {
 public:
   Sunclock(double const &latitude_, double const &longitude_,
-           double const &tz_offset = 0);
+           double const &tz_offset_ = 0);
 
   /**
-   * \overload double Sunclock::irradiance(time_t const &when)
+   * \overload double Sunclock::irradiance(time_t when)
    */
   double irradiance();
 
@@ -21,10 +21,10 @@ public:
    * @param when
    * @return a value representing irradiance (power per unit area)
    */
-  double irradiance(time_t const &when);
+  double irradiance(time_t when);
 
   /**
-   * \overload time_t Sunclock::sunrise(time_t const &date)
+   * \overload time_t Sunclock::sunrise(time_t date)
    */
   time_t sunrise();
 
@@ -34,10 +34,10 @@ public:
    * @param date only date is considered
    * @return sunrise time
    */
-  time_t sunrise(time_t const &date);
+  time_t sunrise(time_t date);
 
   /**
-   * \overload time_t Sunclock::solar_noon(time_t const &date)
+   * \overload time_t Sunclock::solar_noon(time_t date)
    */
   time_t solar_noon();
 
@@ -47,10 +47,10 @@ public:
    * @param date only date is considered
    * @return solar_noon time
    */
-  time_t solar_noon(time_t const &date);
+  time_t solar_noon(time_t date);
 
   /**
-   * \overload time_t Sunclock::sunset(time_t const &date)
+   * \overload time_t Sunclock::sunset(time_t date)
    */
   time_t sunset();
 
@@ -60,7 +60,7 @@ public:
    * @param date only date is considered
    * @return sunset time
    */
-  time_t sunset(time_t const &date);
+  time_t sunset(time_t date);
 
 private:
   // in decimal degrees, east is positive
@@ -73,9 +73,10 @@ private:
   double const tz_offset;
 
   /**
+   * @param date
    * @return percentage past midnight, i.e. noon  is 0.5
    */
-  double time_of_day(time_t date, double tz_offset);
+  double time_of_day(time_t date);
 
   static int days_since_1900(struct tm *t);
 
@@ -84,8 +85,7 @@ private:
    * @param decimal_day decimal between 0.0 and 1.0, e.g. noon = 0.5
    * @return time_t with date and time set accordingly
    */
-  static time_t time_from_decimal_day(time_t const &date,
-                                      double const &decimal_day);
+  static time_t time_from_decimal_day(time_t date, double decimal_day);
 
   /**
    * Get day count since Monday, January 1, 4713 BC
