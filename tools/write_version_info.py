@@ -4,7 +4,7 @@ import sys
 import time
 
 
-def get_version_info():
+def get_version_info(base_path=""):
     try:
         git_revision = subprocess.check_output(["git", "rev-parse", "HEAD"]).decode("utf-8") .split("\n")[0]
         git_branch = subprocess.check_output(["git", "rev-parse","--abbrev-ref", "HEAD"]).decode("utf-8").split("\n")[0]
@@ -13,7 +13,7 @@ def get_version_info():
         git_branch = "non-git"
 
     def read_version():
-        with open("VERSION") as f:
+        with open(base_path + "VERSION") as f:
             return f.readline().strip()
 
     build_datetime = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
