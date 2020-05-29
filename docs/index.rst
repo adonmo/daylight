@@ -7,6 +7,7 @@ Welcome to daylight's documentation
 
     Home <self>
     reference
+    similar-libraries
 
 daylight or libdaylight is a library which enables you to answer daylight related questions like:
 
