@@ -1,10 +1,12 @@
-daylight
-========
+Welcome to daylight's documentation
+===================================
 
 .. toctree::
-    :hidden:
-    :maxdepth: 2
+    :maxdepth: 1
     :caption: Contents:
+
+    Home <self>
+    reference
 
 daylight or libdaylight is a library which enables you to answer daylight related questions like:
 
@@ -18,12 +20,6 @@ Installation
 
     pip install git+https://github.com/adonmo/daylight
 
-Reference
----------
-
-.. automodule:: daylight
-   :members:
-   :undoc-members:
 
 Indices and tables
 ==================
