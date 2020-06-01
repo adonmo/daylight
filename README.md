@@ -22,6 +22,12 @@ The package can be installed by running:
 $ pip install git+https://github.com/adonmo/daylight
 ```
 
+# Examples
+
+The examples directory contains a real world usage of this library at [Adonmo](https://www.adonmo.com), for its season and location independent brightness control mechanism.
+
+![Adonmo brightness control mechanism using daylight](/examples/adonmo-daylight-brightness-control.png)
+
 # Usage (Python)
 
 ```python
