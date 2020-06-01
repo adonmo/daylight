@@ -1,4 +1,5 @@
 import datetime
+import pytest
 import pytz
 import sys
 from pathlib import Path
@@ -20,6 +21,26 @@ def run_tests():
     assert sun.sunrise(epoch(2020, 5, 21, tz=tz)) == epoch(2020, 5, 21, 5, 42, 41, tz)
     assert sun.solar_noon(epoch(2020, 5, 21, tz=tz)) == epoch(2020, 5, 21, 12, 12, 34, tz)
     assert sun.sunset(epoch(2020, 5, 21, tz=tz)) == epoch(2020, 5, 21, 18, 42, 28, tz)
+
+    assert (sun.irradiance([
+        epoch(2020, 5, 21, 3, 0, 0, tz),
+        epoch(2020, 5, 21, 7, 0, 0, tz),
+        epoch(2020, 5, 21, 9, 30, 0, tz),
+        epoch(2020, 5, 21, 12, 0, 0, tz),
+        epoch(2020, 5, 21, 16, 0, 0, tz),
+        epoch(2020, 5, 21, 18, 0, 0, tz),
+        epoch(2020, 5, 21, 21, 0, 0, tz),
+        epoch(2020, 5, 21, 23, 59, 59, tz),
+    ]) == pytest.approx([
+        -0.56570521,
+        0.28650605,
+        0.78259762,
+        0.99753419,
+        0.59285478,
+        0.15220325,
+        -0.49458177,
+        -0.79117714,
+    ]))
 
 
 if __name__ == "__main__":

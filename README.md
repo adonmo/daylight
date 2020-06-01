@@ -1,7 +1,7 @@
 ![Test Status](https://github.com/adonmo/daylight/workflows/Tests/badge.svg)
 
 daylight
-====
+========
 
 daylight or libdaylight is a library which enables you to answer daylight related questions like:
 
@@ -9,6 +9,8 @@ daylight or libdaylight is a library which enables you to answer daylight relate
 - What is the time of sunrise/solarnoon/sunset, given a particular time and location?
 
 libdaylight is written in modern C++ with bindings to python using [pybind11](https://github.com/pybind/pybind11).
+
+daylight's python bindings provide vectorized functions - allowing for efficient analysis when dealing with lots of queries. At the same, this allows daylight to play well with established data science tooling like numpy and pandas.
 
 ⚠️ Currently this library is only tested for basic use cases. For any scientific-grade use cases, or for cases where precise values are needed - this library is not extensively tested, yet. Any contributions from that aspect would be greatly appreciated.
 
@@ -52,6 +54,14 @@ sun.solar_noon(epoch(2020, 5, 21, tz=tz))
 # Know the sunset time for a given date
 # Returns unix timestamp for 18:42 PM
 sun.sunset(epoch(2020, 5, 21, tz=tz))
+
+# daylight's functions are vectorized as well - which means you can compute results
+# for multiple parameters efficiently, while playing well with libraries like numpy/pandas
+# Returns [-0.56570521  0.28650605]
+sun.irradiance([
+    epoch(2020, 5, 21, 3, 0, 0, tz),
+    epoch(2020, 5, 21, 7, 0, 0, tz),
+])
 ```
 
 # Usage (C)
