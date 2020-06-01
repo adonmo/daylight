@@ -54,6 +54,36 @@ sun.solar_noon(epoch(2020, 5, 21, tz=tz))
 sun.sunset(epoch(2020, 5, 21, tz=tz))
 ```
 
+# Usage (C)
+
+libdaylight can also be used in C through the provided C API.
+
+Here is an example code on how to do this:
+
+```c
+#include "daylight_c.h"
+#include <stdio.h>
+
+int main(int argc, char* argv[]) {
+    struct Sunclock* s = newSunclock(17.3859, 78.4867, 5.5);
+    time_t t_20200521141035 = 1590050435;
+    double irradiance = Sunclock_irradiance(s, t_20200521141035);
+    printf("%lf\n", irradiance);
+    deleteSunclock(s);
+}
+```
+
+Save the above file as main.c, and run the following commands to build and run it:
+
+Note: Make sure daylight is [built](#building) first before running these commands.
+
+```sh
+$ gcc -I/<path_to_daylight>/capi -c main.c -o main.o
+$ g++ -L/<path_to_daylight>/build/capi main.o -l:libdaylight_c-0.1.1.so -o main
+$ LD_LIBRARY_PATH=/<path_to_daylight>/build/capi ./main
+0.882754
+```
+
 # Development
 
 ## Building
