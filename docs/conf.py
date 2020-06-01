@@ -15,7 +15,6 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath('..'))
 from tools.write_version_info import get_version_info
 
 # -- General configuration ------------------------------------------------

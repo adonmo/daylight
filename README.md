@@ -70,7 +70,13 @@ This builds three artifacts:
  - **libdaylight-tests** - executable to run tests.
  - **daylight.cpython-38m-x86_64-linux-gnu.so** - python module bindings.
 
-If you make any additional changes, you can just run `make` to get your changes reflected in the compiled outputs.
+If you make any additional changes, you can just run `cmake --build build` again to get your changes reflected in the compiled outputs.
+
+### Building docs
+
+```sh
+cmake --build build --target pydocs
+```
 
 ## Running tests
 
