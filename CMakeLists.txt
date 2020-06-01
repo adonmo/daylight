@@ -11,6 +11,7 @@ endif()
 enable_testing()
 
 add_subdirectory(libdaylight)
+add_subdirectory(capi)
 add_subdirectory(tests)
 add_subdirectory(pybind)
 add_subdirectory(docs)
