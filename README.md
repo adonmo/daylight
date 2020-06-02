@@ -3,7 +3,10 @@
 </p>
 <p align="center">
     <a href="https://github.com/adonmo/daylight/actions">
-        <img src="https://github.com/adonmo/daylight/workflows/Tests/badge.svg/" alt="Tests Status">
+        <img src="https://github.com/adonmo/daylight/workflows/Tests/badge.svg" alt="Tests Status">
+    </a>
+    <a href="https://github.com/adonmo/daylight/blob/master/LICENSE.txt">
+        <img src="https://img.shields.io/github/license/adonmo/daylight.svg" alt="MIT License">
     </a>
 </p>
 
