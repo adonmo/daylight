@@ -153,6 +153,14 @@ $ python test.py
 ```
 If everything is working okay, you should see "All tests passed".
 
+## Contributing
+
+Issues and pull requests are welcome.
+
+* For proposing new features/improvements or reporting bugs, [create an issue](https://github.com/adonmo/daylight/issues/new/choose).
+* Check [open issues](https://github.com/adonmo/daylight/issues) for viewing existing ideas, verify if it is already proposed/being worked upon.
+* When implementing new features make sure to add relavant tests and documentation before sending pull requests.
+
 ## Related projects
 
 [PyEphem](https://github.com/brandon-rhodes/pyephem), [pvlib-python](https://github.com/pvlib/pvlib-python) and [solarpy](https://github.com/aqreed/solarpy) are some libraries which have overlap with the type of problems this library solves.
