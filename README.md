@@ -145,3 +145,9 @@ After building, from the tests/python directory, run:
 $ python test.py
 ```
 If everything is working okay, you should see "All tests passed".
+
+## Related projects
+
+[PyEphem](https://github.com/brandon-rhodes/pyephem), [pvlib-python](https://github.com/pvlib/pvlib-python) and [solarpy](https://github.com/aqreed/solarpy) are some libraries which have overlap with the type of problems this library solves.
+
+Comparision between them and this library can be [read on our docs](https://daylight.readthedocs.io/en/latest/similar-libraries.html)
