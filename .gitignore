@@ -2,6 +2,8 @@ ENV
 build
 __pycache__
 .pyc
+dist
+*.egg-info
 
 # Sphinx documentation
 docs/_build/

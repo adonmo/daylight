@@ -46,4 +46,6 @@ jobs:
     - name: Run Doctests
       working-directory: ${{runner.workspace}}/daylight
       shell: bash -l {0}
-      run: cmake --build build --config $BUILD_TYPE --target pydoctest
+      run: |
+        pip install sphinx sphinx_rtd_theme numpy numpydoc
+        cmake --build build --config $BUILD_TYPE --target pydoctest

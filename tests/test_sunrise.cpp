@@ -10,6 +10,6 @@ TEST_CASE("Sunrise time is calculated with reasonable values", "[sunrise]") {
 
   SECTION("Hyderabad sunrise times are calculated resonably") {
     REQUIRE(s.sunrise(datetime(2020, 5, 21, 14, 10, 35)) ==
-            Approx(datetime(2020, 5, 21, 5, 42, 32)).margin(MINUTE));
+            Approx(datetime(2020, 5, 21, 5, 42, 32)).margin(MINUTE).epsilon(0));
   }
 }
