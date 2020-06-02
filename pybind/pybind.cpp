@@ -26,11 +26,13 @@ PYBIND11_MODULE(daylight, m) {
       .def("irradiance",
            py::vectorize((double (Sunclock::*)(time_t)) & Sunclock::irradiance),
            R"pbdoc(
-    Calculates the irradiance level for given date.
+    Calculates the irradiance level for given datetime.
+
+    This is a vectorized function.
 
     Parameters
     ----------
-    date : int
+    datetime : int or array_like
         unix timestamp (in UTC, seconds)
 
     Examples
@@ -39,17 +41,21 @@ PYBIND11_MODULE(daylight, m) {
     >>> sun = daylight.Sunclock(17.3859, 78.4867, 5.5)
     >>> sun.irradiance(1590050435)
     0.882753920406182
+    >>> sun.irradiance([1590010200, 1590024600])
+    array([-0.56570521,  0.28650605])
 )pbdoc",
-           py::arg("date"))
+           py::arg("datetime"))
 
       .def("sunrise",
            py::vectorize((time_t(Sunclock::*)(time_t)) & Sunclock::sunrise),
            R"pbdoc(
     Calculates the sunrise time for given date.
 
+    This is a vectorized function.
+
     Parameters
     ----------
-    date : int
+    date : int or array_like
         unix timestamp (in UTC, seconds)
 
     Examples
@@ -58,6 +64,8 @@ PYBIND11_MODULE(daylight, m) {
     >>> sun = daylight.Sunclock(17.3859, 78.4867, 5.5)
     >>> sun.sunrise(1589999400)
     1590019961
+    >>> sun.sunrise([1590010200, 1590024600])
+    array([1590019959, 1590019957])
 )pbdoc",
            py::arg("date"))
 
@@ -66,9 +74,11 @@ PYBIND11_MODULE(daylight, m) {
            R"pbdoc(
     Calculates the solar noon time for given date.
 
+    This is a vectorized function.
+
     Parameters
     ----------
-    date : int
+    date : int or array_like
         unix timestamp (in UTC, seconds)
 
     Examples
@@ -77,6 +87,8 @@ PYBIND11_MODULE(daylight, m) {
     >>> sun = daylight.Sunclock(17.3859, 78.4867, 5.5)
     >>> sun.solar_noon(1589999400)
     1590043354
+    >>> sun.solar_noon([1590010200, 1590024600])
+    array([1590043355, 1590043355])
 )pbdoc",
            py::arg("date"))
 
@@ -85,9 +97,11 @@ PYBIND11_MODULE(daylight, m) {
            R"pbdoc(
     Calculates the sunset time for given date.
 
+    This is a vectorized function.
+
     Parameters
     ----------
-    date : int
+    date : int or array_like
         unix timestamp (in UTC, seconds)
 
     Examples
@@ -96,6 +110,8 @@ PYBIND11_MODULE(daylight, m) {
     >>> sun = daylight.Sunclock(17.3859, 78.4867, 5.5)
     >>> sun.sunset(1589999400)
     1590066748
+    >>> sun.sunset([1590010200, 1590024600])
+    array([1590066751, 1590066754])
 )pbdoc",
            py::arg("date"));
 }

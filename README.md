@@ -1,7 +1,11 @@
-![Test Status](https://github.com/adonmo/daylight/workflows/Tests/badge.svg)
-
-daylight
-========
+<p align="center">
+    <img src="static/logo.png" width="300">
+</p>
+<p align="center">
+    <a href="https://github.com/adonmo/daylight/actions">
+        <img src="https://github.com/adonmo/daylight/workflows/Tests/badge.svg/" alt="Tests Status">
+    </a>
+</p>
 
 daylight or libdaylight is a library which enables you to answer daylight related questions like:
 
@@ -28,7 +32,7 @@ $ pip install git+https://github.com/adonmo/daylight
 
 The examples directory contains a real world usage of this library at [Adonmo](https://www.adonmo.com) - for its season and location independent brightness control mechanism: [Click here](/examples/adonmo-daylight-brightness-control.ipynb) to read it.
 
-![Adonmo brightness control mechanism using daylight](/examples/adonmo-daylight-brightness-control.png)
+![Adonmo brightness control mechanism using daylight](/static/adonmo-daylight-brightness-control.png)
 
 # Usage (Python)
 

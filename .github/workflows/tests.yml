@@ -38,7 +38,12 @@ jobs:
       shell: bash -l {0}
       run: cmake --build build --config $BUILD_TYPE
 
-    - name: Test
+    - name: Run Unit Tests
       working-directory: ${{runner.workspace}}/daylight/build
       shell: bash -l {0}
       run: ctest --output-on-failure -C $BUILD_TYPE
+
+    - name: Run Doctests
+      working-directory: ${{runner.workspace}}/daylight
+      shell: bash -l {0}
+      run: cmake --build build --config $BUILD_TYPE --target pydoctest

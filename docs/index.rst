@@ -1,5 +1,19 @@
+.. role:: raw-html(raw)
+    :format: html
+
+:raw-html:`<br />`
+
+.. image:: ../static/logo.png
+    :width: 300px
+    :align: center
+    :alt: daylight logo
+
+:raw-html:`<br />`
+:raw-html:`<br />`
+
 Welcome to daylight's documentation
 ===================================
+
 
 .. toctree::
     :maxdepth: 1
@@ -14,8 +28,10 @@ daylight or libdaylight is a library which enables you to answer daylight relate
 - Irradiance - How bright is it outside, given a particular time and location?
 - What is the time of sunrise/solarnoon/sunset, given a particular time and location?
 
-Installation
-------------
+For basic usage via Python or C APIs, check `README <https://github.com/adonmo/daylight>`_ on our GitHub repository.
+
+Installation (Python)
+---------------------
 
 .. code-block:: bash
 
