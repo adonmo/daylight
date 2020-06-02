@@ -12,6 +12,8 @@ libdaylight is written in modern C++ with bindings to python using [pybind11](ht
 
 daylight's python bindings provide vectorized functions - allowing for efficient analysis when dealing with lots of queries. At the same, this allows daylight to play well with established data science tooling like numpy and pandas.
 
+The math used in this library is mostly based on [NOAA's solar calculations](https://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html), which were in turn based on ***Astronomical Algorithms***, by Jean Meeus. Also thanks to [this Python implementation](https://michelanders.blogspot.com/2010/12/calulating-sunrise-and-sunset-in-python.html) of these calculations by Michel Landers, which was a very useful reference while building this library.
+
 ⚠️ Currently this library is only tested for basic use cases. For any scientific-grade use cases, or for cases where precise values are needed - this library is not extensively tested, yet. Any contributions from that aspect would be greatly appreciated.
 
 # Installation
