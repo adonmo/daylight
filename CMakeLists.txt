@@ -10,6 +10,9 @@ endif()
 
 enable_testing()
 
+# Ensures all git submodules are present
+execute_process(COMMAND git submodule update --init --recursive)
+
 add_subdirectory(libdaylight)
 add_subdirectory(capi)
 add_subdirectory(tests)

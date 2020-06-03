@@ -94,6 +94,7 @@ setup(
     keywords='irradiance sunrise sunset sun geo gis',
     ext_modules=[CMakeExtension('daylight')],
     packages=find_packages(),
+    install_requires=["numpy>=1.10"],
     extras_require={"docs": ["sphinx", "sphinx-rtd-theme", "numpydoc"]},
     cmdclass=dict(build_ext=CMakeBuild),
     url="https://github.com/adonmo/daylight",
