@@ -4,6 +4,7 @@ __pycache__
 .pyc
 dist
 *.egg-info
+*.local
 
 # Sphinx documentation
 docs/_build/

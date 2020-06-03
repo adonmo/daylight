@@ -31,6 +31,8 @@ The package can be installed by running:
 $ pip install git+https://github.com/adonmo/daylight
 ```
 
+Note: This requires cmake and pybind11 to be installed on your system. If you're having trouble with pybind11, [try using a conda enviroment](https://github.com/pybind/pybind11/issues/1379#issuecomment-468933426) instead.
+
 # Examples
 
 The examples directory contains a real world usage of this library at [Adonmo](https://www.adonmo.com) - for its season and location independent brightness control mechanism: [Click here](/examples/adonmo-daylight-brightness-control.ipynb) to read it.
@@ -78,6 +80,8 @@ sun.irradiance([
     epoch(2020, 5, 21, 7, 0, 0, tz),
 ])
 ```
+
+Python API Reference and comparision with other libraries can be found on our docs: https://adonmo-daylight.readthedocs.io/en/latest/
 
 # Usage (C)
 
@@ -165,4 +169,4 @@ Issues and pull requests are welcome.
 
 [PyEphem](https://github.com/brandon-rhodes/pyephem), [pvlib-python](https://github.com/pvlib/pvlib-python) and [solarpy](https://github.com/aqreed/solarpy) are some libraries which have overlap with the type of problems this library solves.
 
-Comparision between them and this library can be [read on our docs](https://daylight.readthedocs.io/en/latest/similar-libraries.html)
+Comparision between them and this library can be [read on our docs](https://adonmo-daylight.readthedocs.io/en/latest/similar-libraries.html)
