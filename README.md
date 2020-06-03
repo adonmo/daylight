@@ -25,8 +25,12 @@ The math used in this library is mostly based on [NOAA's solar calculations](htt
 
 # Installation
 
-The package can be installed by running:
+## From PyPI
+```sh
+$ pip install daylight
+```
 
+## From source
 ```sh
 $ pip install git+https://github.com/adonmo/daylight
 ```
