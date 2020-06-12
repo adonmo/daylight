@@ -25,7 +25,7 @@ The math used in this library is mostly based on [NOAA's solar calculations](htt
 
 # Installation
 
-## From PyPI
+## From [PyPI](https://pypi.org/project/daylight/)
 ```sh
 $ pip install daylight
 ```
@@ -119,33 +119,25 @@ $ LD_LIBRARY_PATH=/<path_to_daylight>/build/capi ./main
 
 # Development
 
-## Building
+libdaylight uses the [CMake](https://cmake.org/) build system.
 
-libdaylight uses the [CMake](https://cmake.org/) build system. Follow these steps to build the project:
+## Building just the library
 
 ```sh
 $ cmake -B build -S .
 $ cmake --build build
 ```
 
-This builds three artifacts:
- - **libdaylight&#46;so** - the compiled shared object for use in C/C++ projects.
- - **libdaylight-tests** - executable to run tests.
- - **daylight.cpython-38m-x86_64-linux-gnu.so** - python module bindings.
+This builds a static library file `libdaylight.a`
 
 If you make any additional changes, you can just run `cmake --build build` again to get your changes reflected in the compiled outputs.
 
-### Building docs
-
-```sh
-cmake --build build --target pydocs
-```
-
 ## Running tests
 
-After building, from the build directory, run:
 ```sh
-$ ./tests/libdaylight-tests
+$ cmake -B build/test -S test
+$ cmake --build build/test
+$ ./build/test/libdaylight-tests
 ```
 If everything is working okay, you should see "All tests passed".
 
@@ -160,6 +152,19 @@ After building, from the tests/python directory, run:
 $ python test.py
 ```
 If everything is working okay, you should see "All tests passed".
+
+## Building docs
+
+```sh
+$ pip install sphinx sphinx_rtd_theme numpy numpydoc
+$ cmake -B build/test -S test
+$ cmake --build build/test
+$ cmake --build build/docs --target pydocs
+```
+You can hen proceed to host the docs locally, for example on http://0.0.0.0:8000/
+```sh
+$ python -m http.server --directory docs/_build/html/
+```
 
 ## Contributing
 

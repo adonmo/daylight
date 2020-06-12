@@ -13,41 +13,45 @@ jobs:
     strategy:
       matrix:
         os: [windows-latest, ubuntu-latest, macOS-latest]
+        # TODO test for more python versions
+        python-version: [3.8]
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
-    - name: Set up conda path
-      # Using this would mean we should use bash -l {0} in all the other steps instead
-      # of just bash for the conda (and its packages) path to properly reflected
-      uses: goanpeca/setup-miniconda@v1
-
-    - name: Download Pybind11
-      run: conda install pybind11 -c conda-forge
-      # Use a bash shell so we can use the same syntax for environment variable
-      # access regardless of the host operating system
-      shell: bash -l {0}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
 
     - name: Configure CMake for tests
-      shell: bash -l {0}
+      shell: bash
       working-directory: ${{runner.workspace}}/daylight
-      run: cmake -Htest -Bbuild/test -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake -B build/test -S test -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Build
       working-directory: ${{runner.workspace}}/daylight
-      shell: bash -l {0}
+      shell: bash
       run: cmake --build build/test --config $BUILD_TYPE
 
     - name: Run Unit Tests
       working-directory: ${{runner.workspace}}/daylight/build/test
-      shell: bash -l {0}
+      shell: bash
       run: ctest --output-on-failure -C $BUILD_TYPE
+
+    - name: Test python bindings
+      working-directory: ${{runner.workspace}}/daylight/test/python
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install pytest pytz numpy
+        python test.py
 
     - name: Run Doctests
       working-directory: ${{runner.workspace}}/daylight
-      shell: bash -l {0}
+      shell: bash
       run: |
-        pip install sphinx sphinx_rtd_theme numpy numpydoc
-        cmake -Hdocs -Bbuild/docs -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        python -m pip install sphinx sphinx_rtd_theme numpy numpydoc
+        cmake -B build/docs -S docs -DCMAKE_BUILD_TYPE=$BUILD_TYPE
         cmake --build build/docs --config $BUILD_TYPE
         cmake --build build/docs --target pydoctest --config $BUILD_TYPE

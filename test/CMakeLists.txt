@@ -22,10 +22,15 @@ CPMAddPackage(
 
 if (TEST_INSTALLED_VERSION)
   find_package(libdaylight REQUIRED)
+  find_package(daylight REQUIRED)
 else()
   CPMAddPackage(
     NAME libdaylight
     SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..
+  )
+  CPMAddPackage(
+    NAME daylight
+    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../pybind
   )
 endif()
 

@@ -2,13 +2,16 @@ cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
 # ---- Project ----
 
-project(libdaylight)
+project(
+  libdaylight
+  LANGUAGES CXX
+)
 # Get version from VERSION file instead of hardcoding here
 # This is so that we can maintain a single version across C++ and Python
-execute_process(COMMAND python tools/print_version.py OUTPUT_VARIABLE DAYLIGHT_VERSION)
-set(PROJECT_VERSION ${DAYLIGHT_VERSION})
+execute_process(COMMAND python tools/print_version.py OUTPUT_VARIABLE LIBDAYLIGHT_VERSION)
+set(PROJECT_VERSION ${LIBDAYLIGHT_VERSION})
 
-message(${DAYLIGHT_VERSION})
+message(${LIBDAYLIGHT_VERSION})
 
 # ---- Include guards ----
 

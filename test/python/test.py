@@ -1,9 +1,18 @@
 import datetime
 import pytest
 import pytz
+
+# This is a hack as of now to get cross platform CI tests running
+# TODO find a more elegant way
 import sys
 from pathlib import Path
-sys.path.append(str(Path(__file__).absolute().parent.parent.parent / "build" / "pybind"))
+
+is_windows = hasattr(sys, 'getwindowsversion')
+if is_windows:
+    sys.path.append(str(Path(__file__).absolute().parent.parent.parent / "build" / "test" / "_deps" / "daylight-build" / "Release"))
+else:
+    sys.path.append(str(Path(__file__).absolute().parent.parent.parent / "build" / "test" / "_deps" / "daylight-build"))
+# end of hack
 
 import daylight
 

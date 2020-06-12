@@ -20,7 +20,7 @@ jobs:
       run: brew install clang-format
 
     - name: configure
-      run: cmake -Htest -Bbuild
+      run: cmake -B build -S test
 
     - name: check style
       run: cmake --build build --target check-format

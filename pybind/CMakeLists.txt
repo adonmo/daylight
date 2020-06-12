@@ -4,6 +4,10 @@ project(
   daylight
   LANGUAGES CXX
 )
+# Get version from VERSION file instead of hardcoding here
+# This is so that we can maintain a single version across C++ and Python
+execute_process(COMMAND python tools/print_version.py OUTPUT_VARIABLE DAYLIGHT_VERSION)
+set(PROJECT_VERSION ${DAYLIGHT_VERSION})
 
 # ---- Dependencies ----
 
@@ -38,4 +42,21 @@ target_include_directories(daylight
   PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include/${PROJECT_NAME}-${PROJECT_VERSION}>
+)
+
+# ---- Create an installable target ----
+# this allows users to install and find the library via `find_package()`.
+
+# the location where the project's version header will be placed
+# should match the project's regular header paths
+string(TOLOWER ${PROJECT_NAME}/version.h VERSION_HEADER_LOCATION)
+
+packageProject(
+  NAME ${PROJECT_NAME}
+  VERSION ${PROJECT_VERSION}
+  BINARY_DIR ${PROJECT_BINARY_DIR}
+  INCLUDE_DIR ${PROJECT_SOURCE_DIR}/include
+  INCLUDE_DESTINATION include/${PROJECT_NAME}-${PROJECT_VERSION}
+  VERSION_HEADER "${VERSION_HEADER_LOCATION}"
+  DEPENDENCIES ""
 )
