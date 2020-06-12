@@ -1,5 +1,4 @@
-#include "daylight_c.h"
-#include <libdaylight/Sunclock.hpp>
+#include <daylight/daylight_c.h>
 
 extern "C" {
 Sunclock *newSunclock(double const latitude_, double const longitude_,

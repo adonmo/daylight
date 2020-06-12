@@ -28,18 +28,18 @@ jobs:
       # access regardless of the host operating system
       shell: bash -l {0}
 
-    - name: Configure CMake
+    - name: Configure CMake for tests
       shell: bash -l {0}
       working-directory: ${{runner.workspace}}/daylight
-      run: cmake -B build -S . -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+      run: cmake -Htest -Bbuild/test -DCMAKE_BUILD_TYPE=$BUILD_TYPE
 
     - name: Build
       working-directory: ${{runner.workspace}}/daylight
       shell: bash -l {0}
-      run: cmake --build build --config $BUILD_TYPE
+      run: cmake --build build/test --config $BUILD_TYPE
 
     - name: Run Unit Tests
-      working-directory: ${{runner.workspace}}/daylight/build
+      working-directory: ${{runner.workspace}}/daylight/build/test
       shell: bash -l {0}
       run: ctest --output-on-failure -C $BUILD_TYPE
 
@@ -48,4 +48,6 @@ jobs:
       shell: bash -l {0}
       run: |
         pip install sphinx sphinx_rtd_theme numpy numpydoc
-        cmake --build build --config $BUILD_TYPE --target pydoctest
+        cmake -Hdocs -Bbuild/docs -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake --build build/docs --config $BUILD_TYPE
+        cmake --build build/docs --target pydoctest --config $BUILD_TYPE

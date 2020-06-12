@@ -9,7 +9,7 @@ time_t datetime(int year, int month, int day, int hour, int minute, int second,
   epoch.tm_year = 70;
   time_t local_tz_offset = mktime(&epoch);
 
-  struct tm timeinfo = {0};
+  struct tm timeinfo = {};
   timeinfo.tm_year = year - 1900;
   timeinfo.tm_mon = month - 1;
   timeinfo.tm_mday = day;

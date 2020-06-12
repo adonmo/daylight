@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+#include <daylight/Sunclock.hpp>
 #include <time.h>
 
 typedef struct Sunclock Sunclock;

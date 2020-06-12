@@ -1,7 +1,7 @@
-#include "catch.hpp"
 #include "common/constants.h"
 #include "common/utils.hpp"
-#include <libdaylight/Sunclock.hpp>
+#include <catch2/catch.hpp>
+#include <daylight/Sunclock.hpp>
 #include <tuple>
 
 Sunclock HYD_SUN(HYD_LAT, HYD_LNG, IST_TZ_OFFSET);
@@ -53,7 +53,8 @@ TEST_CASE("Irradiance is calculated with reasonable values", "[irradiance]") {
               {UTC_TZ_OFFSET, 2020, 5, 21, 13, 30, 0, -0.0809624},
           }));
       Sunclock sun(HYD_LAT, HYD_LNG, tz);
-      REQUIRE(sun.irradiance(datetime(y, mo, d, h, m, s, tz * 60 * 60)) ==
+      int offset = (int)(tz * 60 * 60);
+      REQUIRE(sun.irradiance(datetime(y, mo, d, h, m, s, offset)) ==
               Approx(expected).epsilon(1e-4));
     }
 
@@ -66,7 +67,8 @@ TEST_CASE("Irradiance is calculated with reasonable values", "[irradiance]") {
               {UTC_TZ_OFFSET, 2020, 5, 21, 9, 0, 0, 0.842625},
           }));
       Sunclock sun(HYD_LAT, HYD_LNG, tz);
-      REQUIRE(sun.irradiance(datetime(y, mo, d, h, m, s, tz * 60 * 60)) ==
+      int offset = (int)(tz * 60 * 60);
+      REQUIRE(sun.irradiance(datetime(y, mo, d, h, m, s, offset)) ==
               Approx(expected).epsilon(1e-4));
     }
   }

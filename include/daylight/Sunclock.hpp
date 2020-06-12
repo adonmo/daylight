@@ -117,10 +117,8 @@ private:
   double declination(double _obliq_corr, double _sun_app_long);
   double eq_of_time(double _var_y, double _mean_long_sun,
                     double _eccent_earth_orbit, double _mean_anom_sun);
-  double true_solar_time(double _time_of_day, double _declination,
-                         double _eq_of_time);
-  double hour_angle(double _declination, double _eq_of_time,
-                    double _true_solar_time);
+  double true_solar_time(double _time_of_day, double _eq_of_time);
+  double hour_angle(double _true_solar_time);
   double hour_angle_sunrise(double _declination);
   double solar_zenith(double _declination, double _hour_angle);
   double solar_elevation(double _solar_zenith);

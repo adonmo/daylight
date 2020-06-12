@@ -1,5 +1,5 @@
 #include <cmath>
-#include <libdaylight/Sunclock.hpp>
+#include <daylight/Sunclock.hpp>
 #include <stdexcept>
 
 inline double rad(double degrees) {
@@ -19,7 +19,7 @@ Sunclock::Sunclock(double const &latitude_, double const &longitude_,
 double Sunclock::irradiance() { return irradiance(time(0)); }
 
 double Sunclock::irradiance(time_t when) {
-  when = when + tz_offset * 60 * 60;
+  when = when + (time_t)(tz_offset * 60 * 60);
   struct tm *t = gmtime(&when);
   double _time_of_day = time_of_day(when);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
@@ -36,9 +36,8 @@ double Sunclock::irradiance(time_t when) {
   double _eq_of_time =
       eq_of_time(_var_y, _mean_long_sun, _eccent_earth_orbit, _mean_anom_sun);
   double _declination = declination(_obliq_corr, _sun_app_long);
-  double _true_solar_time =
-      true_solar_time(_time_of_day, _declination, _eq_of_time);
-  double _hour_angle = hour_angle(_declination, _eq_of_time, _true_solar_time);
+  double _true_solar_time = true_solar_time(_time_of_day, _eq_of_time);
+  double _hour_angle = hour_angle(_true_solar_time);
   double _solar_zenith = solar_zenith(_declination, _hour_angle);
   return std::cos(rad(_solar_zenith));
 }
@@ -46,7 +45,7 @@ double Sunclock::irradiance(time_t when) {
 time_t Sunclock::sunrise() { return sunrise(time(0)); }
 
 time_t Sunclock::sunrise(time_t date) {
-  date = date + tz_offset * 60 * 60;
+  date = date + (time_t)(tz_offset * 60 * 60);
   struct tm *t = gmtime(&date);
   double _time_of_day = time_of_day(date);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
@@ -68,13 +67,14 @@ time_t Sunclock::sunrise(time_t date) {
   double noon_decimal_day =
       (720 - 4 * longitude - _eq_of_time + tz_offset * 60) / 1440;
   double decimal_day = noon_decimal_day - _hour_angle_sunrise * 4 / 1440;
-  return time_from_decimal_day(date, decimal_day) - tz_offset * 60 * 60;
+  return time_from_decimal_day(date, decimal_day) -
+         (time_t)(tz_offset * 60 * 60);
 }
 
 time_t Sunclock::solar_noon() { return solar_noon(time(0)); }
 
 time_t Sunclock::solar_noon(time_t date) {
-  date = date + tz_offset * 60 * 60;
+  date = date + (time_t)(tz_offset * 60 * 60);
   struct tm *t = gmtime(&date);
   double _time_of_day = time_of_day(date);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
@@ -82,25 +82,22 @@ time_t Sunclock::solar_noon(time_t date) {
   double _mean_obliq_ecliptic = mean_obliq_ecliptic(_julian_century);
   double _mean_long_sun = mean_long_sun(_julian_century);
   double _mean_anom_sun = mean_anom_sun(_julian_century);
-  double _sun_eq_of_centre = sun_eq_of_centre(_mean_anom_sun, _julian_century);
-  double _sun_true_long = sun_true_long(_mean_long_sun, _sun_eq_of_centre);
   double _obliq_corr = obliq_corr(_mean_obliq_ecliptic, _julian_century);
-  double _sun_app_long = sun_app_long(_sun_true_long, _julian_century);
   double _eccent_earth_orbit = eccent_earth_orbit(_julian_century);
   double _var_y = var_y(_obliq_corr);
   double _eq_of_time =
       eq_of_time(_var_y, _mean_long_sun, _eccent_earth_orbit, _mean_anom_sun);
-  double _declination = declination(_obliq_corr, _sun_app_long);
 
   double decimal_day =
       (720 - 4 * longitude - _eq_of_time + tz_offset * 60) / 1440;
-  return time_from_decimal_day(date, decimal_day) - tz_offset * 60 * 60;
+  return time_from_decimal_day(date, decimal_day) -
+         (time_t)(tz_offset * 60 * 60);
 }
 
 time_t Sunclock::sunset() { return sunset(time(0)); }
 
 time_t Sunclock::sunset(time_t date) {
-  date = date + tz_offset * 60 * 60;
+  date = date + (time_t)(tz_offset * 60 * 60);
   struct tm *t = gmtime(&date);
   double _time_of_day = time_of_day(date);
   double _julian_day = julian_day(t, _time_of_day, tz_offset);
@@ -122,7 +119,8 @@ time_t Sunclock::sunset(time_t date) {
   double noon_decimal_day =
       (720 - 4 * longitude - _eq_of_time + tz_offset * 60) / 1440;
   double decimal_day = noon_decimal_day + _hour_angle_sunrise * 4 / 1440;
-  return time_from_decimal_day(date, decimal_day) - tz_offset * 60 * 60;
+  return time_from_decimal_day(date, decimal_day) -
+         (time_t)(tz_offset * 60 * 60);
 }
 
 double Sunclock::time_of_day(time_t date) {
@@ -139,7 +137,7 @@ time_t Sunclock::time_from_decimal_day(time_t date, double decimal_day) {
   time_t local_tz_offset = mktime(&epoch);
 
   struct tm *dt = gmtime(&date);
-  struct tm t = {0};
+  struct tm t = {};
   t.tm_year = dt->tm_year;
   t.tm_mon = dt->tm_mon;
   t.tm_mday = dt->tm_mday;
@@ -184,12 +182,12 @@ double Sunclock::mean_long_sun(double _julian_century) {
   return (
       280.46646 +
       fmod(_julian_century * (36000.76983 + _julian_century * 0.0003032), 360));
-};
+}
 
 double Sunclock::mean_anom_sun(double _julian_century) {
   return 357.52911 +
          _julian_century * (35999.05029 - 0.0001537 * _julian_century);
-};
+}
 
 double Sunclock::sun_eq_of_centre(double _mean_anom_sun,
                                   double _julian_century) {
@@ -199,7 +197,7 @@ double Sunclock::sun_eq_of_centre(double _mean_anom_sun,
          sin(rad(2 * _mean_anom_sun)) *
              (0.019993 - 0.000101 * _julian_century) +
          sin(rad(3 * _mean_anom_sun)) * 0.000289;
-};
+}
 
 double Sunclock::sun_true_long(double _mean_long_sun,
                                double _sun_eq_of_centre) {
@@ -209,11 +207,11 @@ double Sunclock::sun_true_long(double _mean_long_sun,
 double Sunclock::eccent_earth_orbit(double _julian_century) {
   return 0.016708634 -
          _julian_century * (0.000042037 + 0.0001537 * _julian_century);
-};
+}
 
 double Sunclock::var_y(double _obliq_corr) {
   return tan(rad(_obliq_corr / 2)) * tan(rad(_obliq_corr / 2));
-};
+}
 
 double Sunclock::mean_obliq_ecliptic(double _julian_century) {
   return (23 + (26 + ((21.448 - _julian_century *
@@ -250,15 +248,13 @@ double Sunclock::eq_of_time(double _var_y, double _mean_long_sun,
                      sin(2 * rad(_mean_anom_sun)));
 }
 
-double Sunclock::true_solar_time(double _time_of_day, double _declination,
-                                 double _eq_of_time) {
+double Sunclock::true_solar_time(double _time_of_day, double _eq_of_time) {
   return fmod(
       (_time_of_day * 1440 + _eq_of_time + 4 * longitude - 60 * tz_offset),
       1440);
 }
 
-double Sunclock::hour_angle(double _declination, double _eq_of_time,
-                            double _true_solar_time) {
+double Sunclock::hour_angle(double _true_solar_time) {
   return (_true_solar_time / 4 < 0 ? _true_solar_time / 4 + 180
                                    : _true_solar_time / 4 - 180);
 }

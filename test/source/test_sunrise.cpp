@@ -1,7 +1,7 @@
-#include "catch.hpp"
 #include "common/constants.h"
 #include "common/utils.hpp"
-#include <libdaylight/Sunclock.hpp>
+#include <catch2/catch.hpp>
+#include <daylight/Sunclock.hpp>
 
 int const MINUTE = 60;
 
