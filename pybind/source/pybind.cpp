@@ -1,7 +1,8 @@
-#include <daylight/Sunclock.hpp>
 #include <pybind11/numpy.h>
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
+
+#include <daylight/Sunclock.hpp>
 
 namespace py = pybind11;
 
@@ -23,8 +24,7 @@ PYBIND11_MODULE(daylight, m) {
 )pbdoc",
            py::arg("latitude"), py::arg("longitude"), py::arg("tz_offset") = 0)
 
-      .def("irradiance",
-           py::vectorize((double (Sunclock::*)(time_t)) & Sunclock::irradiance),
+      .def("irradiance", py::vectorize((double (Sunclock::*)(time_t)) & Sunclock::irradiance),
            R"pbdoc(
     Calculates the irradiance level for given datetime.
 
@@ -46,8 +46,7 @@ PYBIND11_MODULE(daylight, m) {
 )pbdoc",
            py::arg("datetime"))
 
-      .def("sunrise",
-           py::vectorize((time_t(Sunclock::*)(time_t)) & Sunclock::sunrise),
+      .def("sunrise", py::vectorize((time_t(Sunclock::*)(time_t)) & Sunclock::sunrise),
            R"pbdoc(
     Calculates the sunrise time for given date.
 
@@ -69,8 +68,7 @@ PYBIND11_MODULE(daylight, m) {
 )pbdoc",
            py::arg("date"))
 
-      .def("solar_noon",
-           py::vectorize((time_t(Sunclock::*)(time_t)) & Sunclock::solar_noon),
+      .def("solar_noon", py::vectorize((time_t(Sunclock::*)(time_t)) & Sunclock::solar_noon),
            R"pbdoc(
     Calculates the solar noon time for given date.
 
@@ -92,8 +90,7 @@ PYBIND11_MODULE(daylight, m) {
 )pbdoc",
            py::arg("date"))
 
-      .def("sunset",
-           py::vectorize((time_t(Sunclock::*)(time_t)) & Sunclock::sunset),
+      .def("sunset", py::vectorize((time_t(Sunclock::*)(time_t)) & Sunclock::sunset),
            R"pbdoc(
     Calculates the sunset time for given date.
 

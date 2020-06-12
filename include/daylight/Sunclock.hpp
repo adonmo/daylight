@@ -5,8 +5,7 @@
 
 class Sunclock {
 public:
-  Sunclock(double const &latitude_, double const &longitude_,
-           double const &tz_offset_ = 0);
+  Sunclock(double const &latitude_, double const &longitude_, double const &tz_offset_ = 0);
 
   /**
    * \overload double Sunclock::irradiance(time_t when)
@@ -96,8 +95,7 @@ private:
    * @param timezone    in hours, east is positive, i.e. IST (+05:30) is 5.5
    * @return julian day
    */
-  static double julian_day(struct tm *t, double const &time_of_day,
-                           double const &timezone);
+  static double julian_day(struct tm *t, double const &time_of_day, double const &timezone);
 
   /**
    * Extract information in a suitable format from a time_t object.
@@ -115,8 +113,8 @@ private:
   double obliq_corr(double _mean_obliq_ecliptic, double _julian_century);
   double sun_app_long(double _sun_true_long, double _julian_century);
   double declination(double _obliq_corr, double _sun_app_long);
-  double eq_of_time(double _var_y, double _mean_long_sun,
-                    double _eccent_earth_orbit, double _mean_anom_sun);
+  double eq_of_time(double _var_y, double _mean_long_sun, double _eccent_earth_orbit,
+                    double _mean_anom_sun);
   double true_solar_time(double _time_of_day, double _eq_of_time);
   double hour_angle(double _true_solar_time);
   double hour_angle_sunrise(double _declination);

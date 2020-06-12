@@ -1,7 +1,6 @@
 #include "utils.hpp"
 
-time_t datetime(int year, int month, int day, int hour, int minute, int second,
-                int tz_offset) {
+time_t datetime(int year, int month, int day, int hour, int minute, int second, int tz_offset) {
   struct std::tm epoch;
   epoch.tm_isdst = 0;
   epoch.tm_sec = epoch.tm_min = epoch.tm_hour = epoch.tm_mon = 0;

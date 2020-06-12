@@ -5,13 +5,13 @@
 extern "C" {
 #endif
 
-#include <daylight/Sunclock.hpp>
 #include <time.h>
+
+#include <daylight/Sunclock.hpp>
 
 typedef struct Sunclock Sunclock;
 
-Sunclock *newSunclock(double const latitude_, double const longitude_,
-                      double const tz_offset_);
+Sunclock *newSunclock(double const latitude_, double const longitude_, double const tz_offset_);
 
 double Sunclock_irradiance(Sunclock *v, time_t when);
 time_t Sunclock_sunrise(Sunclock *v, time_t date);
