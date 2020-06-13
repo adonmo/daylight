@@ -1,9 +1,19 @@
-<p align="center">
+<p align="center" style="margin: 48px 0;">
     <img src="static/logo.png" width="300">
 </p>
+
 <p align="center">
     <a href="https://github.com/adonmo/daylight/actions">
         <img src="https://github.com/adonmo/daylight/workflows/Tests/badge.svg" alt="Tests Status">
+    </a>
+    <a href="https://github.com/adonmo/daylight/actions">
+        <img src="https://github.com/adonmo/daylight/workflows/Style/badge.svg" alt="Code Style Checks Status">
+    </a>
+    <a href="https://codecov.io/gh/adonmo/daylight">
+        <img src="https://codecov.io/gh/adonmo/daylight/branch/master/graph/badge.svg" alt="Code Coverage">
+    </a>
+    <a href="https://pypistats.org/packages/daylight">
+        <img src="https://img.shields.io/pypi/dm/daylight.svg" alt="PyPI downloads">
     </a>
     <a href="https://github.com/adonmo/daylight/blob/master/LICENSE.txt">
         <img src="https://img.shields.io/github/license/adonmo/daylight.svg" alt="MIT License">
