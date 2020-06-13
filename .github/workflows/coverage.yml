@@ -1,0 +1,35 @@
+name: Coverage
+
+on: [push, pull_request]
+
+env:
+  CMAKE_VERSION: 3.16.2
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Configure CMake for tests
+      shell: bash
+      working-directory: ${{runner.workspace}}/daylight
+      run: cmake -B build/test -S test -DENABLE_TEST_COVERAGE=1 -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+
+    - name: Build
+      working-directory: ${{runner.workspace}}/daylight
+      shell: bash
+      run: cmake --build build/test --config $BUILD_TYPE
+
+    - name: Run Unit Tests
+      working-directory: ${{runner.workspace}}/daylight/build/test
+      shell: bash
+      run: ctest --output-on-failure -C $BUILD_TYPE
+
+    - name: collect code coverage
+      working-directory: ${{runner.workspace}}/daylight/build/test
+      shell: bash
+      run: bash <(curl -s https://codecov.io/bash) || echo "Codecov did not collect coverage reports"
