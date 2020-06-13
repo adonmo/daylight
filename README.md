@@ -117,6 +117,12 @@ $ LD_LIBRARY_PATH=/<path_to_daylight>/build/capi ./main
 0.882754
 ```
 
+# API Reference
+
+Python: https://adonmo-daylight.readthedocs.io/en/latest/reference.html
+
+C++: https://adonmo.github.io/daylight/
+
 # Development
 
 libdaylight uses the [CMake](https://cmake.org/) build system.
