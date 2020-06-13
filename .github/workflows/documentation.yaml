@@ -8,12 +8,14 @@ on:
 jobs:
   build:
     name: Build and publish documentation
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
       - name: Install doxygen
-        run: brew install doxygen
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y doxygen
 
       - name: Build
         run: |
