@@ -7,4 +7,4 @@ dist
 *.local
 
 # Sphinx documentation
-docs/_build/
+documentation/python/_build/

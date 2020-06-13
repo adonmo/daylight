@@ -5,6 +5,8 @@ project(
   LANGUAGES CXX
 )
 
+get_filename_component(DAYLIGHT_ROOT ../ ABSOLUTE)
+
 # ---- Options ----
 
 option(ENABLE_TEST_COVERAGE "Enable test coverage" OFF)
@@ -12,7 +14,7 @@ option(TEST_INSTALLED_VERSION "Test the version found by find_package" OFF)
 
 # ---- Dependencies ----
 
-include(../cmake/CPM.cmake)
+include("${DAYLIGHT_ROOT}/cmake/CPM.cmake")
 
 CPMAddPackage(
   NAME Catch2
@@ -26,11 +28,11 @@ if (TEST_INSTALLED_VERSION)
 else()
   CPMAddPackage(
     NAME libdaylight
-    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/..
+    SOURCE_DIR "${DAYLIGHT_ROOT}"
   )
   CPMAddPackage(
     NAME daylight
-    SOURCE_DIR ${CMAKE_CURRENT_LIST_DIR}/../pybind
+    SOURCE_DIR "${DAYLIGHT_ROOT}/pybind"
   )
 endif()
 
@@ -54,7 +56,6 @@ if (NOT TEST_INSTALLED_VERSION)
     target_compile_options(libdaylight PUBLIC -Wall -pedantic -Wextra -Werror)
   elseif(MSVC)
     target_compile_options(libdaylight PUBLIC /W4 /WX)
-    target_compile_definitions(libdaylight-tests PUBLIC DOCTEST_CONFIG_USE_STD_HEADERS)
   endif()
 endif()
 

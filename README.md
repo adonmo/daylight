@@ -154,16 +154,17 @@ $ python test.py
 If everything is working okay, you should see "All tests passed".
 
 ## Building docs
+### Python
 
 ```sh
 $ pip install sphinx sphinx_rtd_theme numpy numpydoc
-$ cmake -B build/test -S test
-$ cmake --build build/test
+$ cmake -B build/docs -S documentation
+$ cmake --build build/docs
 $ cmake --build build/docs --target pydocs
 ```
-You can hen proceed to host the docs locally, for example on http://0.0.0.0:8000/
+You can then proceed to host the docs locally, for example on http://0.0.0.0:8000/
 ```sh
-$ python -m http.server --directory docs/_build/html/
+$ python -m http.server --directory documentation/python/_build/html
 ```
 
 ## Contributing

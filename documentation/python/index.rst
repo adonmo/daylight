@@ -3,7 +3,7 @@
 
 :raw-html:`<br />`
 
-.. image:: ../static/logo.png
+.. image:: ../../static/logo.png
     :width: 300px
     :align: center
     :alt: daylight logo
