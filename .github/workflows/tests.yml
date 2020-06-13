@@ -46,30 +46,3 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install pytest pytz numpy
         python test.py
-
-  doctests:
-    # Should we run doctests on all platforms as well?
-    name: Run Doctests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8
-
-      - name: Install doxygen
-        run: |
-          sudo apt update
-          sudo apt install -y doxygen
-
-      - name: Build
-        shell: bash
-        run: |
-          python -m pip install sphinx sphinx_rtd_theme numpy numpydoc
-          cmake -B build/docs -S documentation -DCMAKE_BUILD_TYPE=$BUILD_TYPE
-          cmake --build build/docs --config $BUILD_TYPE
-
-      - name: Run Doctests
-        run: cmake --build build/docs --target pydoctest --config $BUILD_TYPE
