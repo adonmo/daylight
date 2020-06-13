@@ -1,4 +1,4 @@
 var annotated_dup =
 [
-    [ "Sunclock", "class_sunclock.html", "class_sunclock" ]
+    [ "Sunclock", "classSunclock.html", "classSunclock" ]
 ];
