@@ -12,8 +12,8 @@ from tools.write_version_info import get_version_info
 
 
 class CMakeExtension(Extension):
-    def __init__(self, name, sourcedir=''):
-        Extension.__init__(self, name, sources=[])
+    def __init__(self, name, sourcedir='', **kwargs):
+        Extension.__init__(self, name, **kwargs)
         self.sourcedir = os.path.abspath(sourcedir)
 
 
@@ -26,44 +26,27 @@ class CMakeBuild(build_ext):
                                ", ".join(e.name for e in self.extensions))
 
         cmake_version = LooseVersion(re.search(r'version\s*([\d.]+)', out.decode()).group(1))
-        if cmake_version < LooseVersion('3.5.0'):
-            raise RuntimeError("CMake >= 3.5.0 is required")
+        if cmake_version < LooseVersion('3.14.0'):
+            raise RuntimeError("CMake >= 3.14.0 is required")
 
         for ext in self.extensions:
             self.build_extension(ext)
 
     def build_extension(self, ext):
         extdir = os.path.abspath(os.path.dirname(self.get_ext_fullpath(ext.name)))
-        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
-                      '-DPYTHON_EXECUTABLE=' + sys.executable]
 
         build_type = os.environ.get("BUILD_TYPE", "Release")
+        cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
+                      '-DPYTHON_EXECUTABLE=' + sys.executable]
+        cmake_args += ['-DCMAKE_BUILD_TYPE=' + build_type]
+
         build_args = ['--config', build_type]
+        build_args += ['--', '-j4']
 
-        # Pile all .so in one place and use $ORIGIN as RPATH
-        cmake_args += ["-DCMAKE_BUILD_WITH_INSTALL_RPATH=TRUE"]
-        cmake_args += ["-DCMAKE_INSTALL_RPATH={}".format("$ORIGIN")]
-
-        if platform.system() == "Windows":
-            cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(build_type.upper(), extdir)]
-            if sys.maxsize > 2**32:
-                cmake_args += ['-A', 'x64']
-            build_args += ['--', '/m']
-        else:
-            cmake_args += ['-DCMAKE_BUILD_TYPE=' + build_type]
-            build_args += ['--', '-j4']
-
-        env = os.environ.copy()
-        env['CXXFLAGS'] = '{} -DVERSION_INFO=\\"{}\\"'.format(env.get('CXXFLAGS', ''),
-                                                              self.distribution.get_version())
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-        subprocess.check_call(['cmake', ext.sourcedir] + cmake_args, cwd=self.build_temp, env=env)
-        subprocess.check_call(['cmake',
-                               '--build', '.',
-                               '--target', ext.name
-                               ] + build_args,
-                              cwd=self.build_temp)
+        subprocess.check_call(['cmake', '-B', self.build_temp, '-S', ext.sourcedir + os.sep + 'pybind'] + cmake_args)
+        subprocess.check_call(['cmake', '--build', self.build_temp] + build_args)
 
 setup(
     name='daylight',
@@ -71,7 +54,7 @@ setup(
     author='Krishna Chaitanya Bommakanti',
     author_email='bkchaitan94@gmail.com',
     description='Python bindings to libdaylight',
-    long_description=open("README.md").read(),
+    long_description=open("README.md", encoding="utf-8").read(),
     long_description_content_type='text/markdown',
     classifiers=[
         "Development Status :: 3 - Alpha",
@@ -92,9 +75,9 @@ setup(
         "Topic :: Utilities",
     ],
     keywords='irradiance sunrise sunset sun geo gis',
-    ext_modules=[CMakeExtension('daylight')],
+    ext_modules=[CMakeExtension('daylight', sources=[])],
     packages=find_packages(),
-    install_requires=["numpy>=1.10"],
+    install_requires=["numpy"],
     extras_require={"docs": ["sphinx", "sphinx-rtd-theme", "numpydoc"]},
     cmdclass=dict(build_ext=CMakeBuild),
     url="https://github.com/adonmo/daylight",

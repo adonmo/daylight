@@ -1,0 +1,14 @@
+include cmake/*
+
+include source/*
+include source/**/*
+
+include pybind/*
+include pybind/**/*
+
+include include/*
+include include/**/*
+
+include CMakeLists.txt
+include LICENSE.txt
+include VERSION

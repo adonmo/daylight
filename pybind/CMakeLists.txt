@@ -6,7 +6,7 @@ project(
 )
 # Get version from VERSION file instead of hardcoding here
 # This is so that we can maintain a single version across C++ and Python
-execute_process(COMMAND python tools/print_version.py OUTPUT_VARIABLE DAYLIGHT_VERSION)
+file(STRINGS ../VERSION DAYLIGHT_VERSION)
 set(PROJECT_VERSION ${DAYLIGHT_VERSION})
 
 # ---- Dependencies ----
