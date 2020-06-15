@@ -1,5 +1,5 @@
 <p align="center" style="margin: 48px 0;">
-    <img src="static/logo.png" width="300">
+    <img src="https://github.com/adonmo/daylight/raw/master/static/logo.png" width="300">
 </p>
 
 <p align="center">
