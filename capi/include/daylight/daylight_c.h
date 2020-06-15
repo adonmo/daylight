@@ -7,8 +7,6 @@ extern "C" {
 
 #include <time.h>
 
-#include <daylight/Sunclock.hpp>
-
 typedef struct Sunclock Sunclock;
 
 Sunclock *newSunclock(double const latitude_, double const longitude_, double const tz_offset_);

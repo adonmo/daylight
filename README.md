@@ -25,11 +25,11 @@ daylight or libdaylight is a library which enables you to answer daylight relate
 - Irradiance - How bright is it outside, given a particular time and location?
 - What is the time of sunrise/solarnoon/sunset, given a particular time and location?
 
+The math used in this library is mostly based on [NOAA's solar calculations](https://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html), which were in turn based on ***Astronomical Algorithms***, by Jean Meeus. Also thanks to [this Python implementation](https://michelanders.blogspot.com/2010/12/calulating-sunrise-and-sunset-in-python.html) of these calculations by Michel Landers, which was a very useful reference while building this library.
+
 libdaylight is written in modern C++ with bindings to python using [pybind11](https://github.com/pybind/pybind11).
 
-daylight's python bindings provide vectorized functions - allowing for efficient analysis when dealing with lots of queries. At the same, this allows daylight to play well with established data science tooling like numpy and pandas.
-
-The math used in this library is mostly based on [NOAA's solar calculations](https://www.esrl.noaa.gov/gmd/grad/solcalc/calcdetails.html), which were in turn based on ***Astronomical Algorithms***, by Jean Meeus. Also thanks to [this Python implementation](https://michelanders.blogspot.com/2010/12/calulating-sunrise-and-sunset-in-python.html) of these calculations by Michel Landers, which was a very useful reference while building this library.
+daylight's python bindings provide **vectorized functions** - allowing for efficient analysis when dealing with lots of queries. At the same, this allows daylight to play well with established data science tooling like numpy and pandas.
 
 ⚠️ Currently this library is only tested for basic use cases. For any scientific-grade use cases, or for cases where precise values are needed - this library is not extensively tested, yet. Any contributions from that aspect would be greatly appreciated.
 
@@ -121,8 +121,10 @@ Save the above file as main.c, and run the following commands to build and run i
 Note: Make sure daylight is [built](#building) first before running these commands.
 
 ```sh
-$ gcc -I/<path_to_daylight>/capi -c main.c -o main.o
-$ g++ -L/<path_to_daylight>/build/capi main.o -l:libdaylight_c-0.1.1.so -o main
+$ cmake -B build/capi -S capi
+$ cmake --build build/capi
+$ gcc -I/<path_to_daylight>/capi/include -c main.c -o main.o
+$ g++ -L/<path_to_daylight>/build/capi main.o -l:libdaylight_c.so -o main
 $ LD_LIBRARY_PATH=/<path_to_daylight>/build/capi ./main
 0.882754
 ```

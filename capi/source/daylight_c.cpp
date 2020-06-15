@@ -1,5 +1,7 @@
 #include <daylight/daylight_c.h>
 
+#include <daylight/Sunclock.hpp>
+
 extern "C" {
 Sunclock *newSunclock(double const latitude_, double const longitude_, double const tz_offset_) {
   return new Sunclock(latitude_, longitude_, tz_offset_);

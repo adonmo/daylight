@@ -18,10 +18,12 @@ CPMAddPackage(
 
 file(GLOB_RECURSE headers CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/include/*.h")
 file(GLOB_RECURSE sources CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/source/*.cpp")
-add_library(daylight_c ${headers} ${sources})
+add_library(daylight_c SHARED ${headers} ${sources})
 target_link_libraries(daylight_c libdaylight)
 
-set_target_properties(daylight_c PROPERTIES CXX_STANDARD 11)
+if(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
 
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(daylight_c PUBLIC "$<$<BOOL:${MSVC}>:/permissive->")
