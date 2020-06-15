@@ -35,6 +35,10 @@ set_target_properties(daylight PROPERTIES
     SUFFIX "${PYTHON_MODULE_EXTENSION}"
 )
 
+if(MSVC)
+    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
 # being a cross-platform target, we enforce standards conformance on MSVC
 target_compile_options(daylight PUBLIC "$<$<BOOL:${MSVC}>:/permissive->")
 

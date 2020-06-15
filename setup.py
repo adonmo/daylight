@@ -38,14 +38,28 @@ class CMakeBuild(build_ext):
         build_type = os.environ.get("BUILD_TYPE", "Release")
         cmake_args = ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=' + extdir,
                       '-DPYTHON_EXECUTABLE=' + sys.executable]
-        cmake_args += ['-DCMAKE_BUILD_TYPE=' + build_type]
 
         build_args = ['--config', build_type]
-        build_args += ['--', '-j4']
+
+        env = os.environ.copy()
+
+        if platform.system() == "Windows":
+            cmake_args += ['-DCMAKE_LIBRARY_OUTPUT_DIRECTORY_{}={}'.format(build_type.upper(), extdir)]
+            cmake_args += ['-DCMAKE_SUPPRESS_REGENERATION=1']
+            cmake_args += ['-G', "Visual Studio 16 2019"]  # Hardcode for now
+            if sys.maxsize > 2**32:
+                cmake_args += ['-A', 'x64']
+            else:
+                cmake_args += ['-A', 'Win32']
+            build_args += ['--', '/m']
+            env['CXXFLAGS'] = '{} -permissive-'.format(env.get('CXXFLAGS', ''))
+        else:
+            cmake_args += ['-DCMAKE_BUILD_TYPE=' + build_type]
+            build_args += ['--', '-j4']
 
         if not os.path.exists(self.build_temp):
             os.makedirs(self.build_temp)
-        subprocess.check_call(['cmake', '-B', self.build_temp, '-S', ext.sourcedir + os.sep + 'pybind'] + cmake_args)
+        subprocess.check_call(['cmake', '-B', self.build_temp, '-S', ext.sourcedir + os.sep + 'pybind'] + cmake_args, env=env)
         subprocess.check_call(['cmake', '--build', self.build_temp] + build_args)
 
 setup(
