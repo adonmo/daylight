@@ -12,9 +12,9 @@ class PyBind11Include:
 
 extra_compile_args = []
 if platform.system() == "Windows":
-    extra_compile_args.append('/std:c++17')
+    extra_compile_args.append('/std:c++14')
 else:
-    extra_compile_args.append('-std=c++17')
+    extra_compile_args.append('-std=c++14')
 
 
 setup(
@@ -47,9 +47,10 @@ setup(
     ext_modules=[
         Extension(
             'daylight',
-            ['source/Sunclock.cpp', 'pybind/daylight.cpp'],
+            ['source/Sunclock.cpp', 'pybind/source/daylight.cpp'],
             include_dirs=[
                 'include',
+                'pybind/include',
                 PyBind11Include(),
             ],
             extra_compile_args=extra_compile_args,

@@ -1,10 +1,5 @@
-#include <pybind11/numpy.h>
-#include <pybind11/pybind11.h>
-#include <pybind11/stl.h>
-
-#include <daylight/Sunclock.hpp>
-
-namespace py = pybind11;
+#include <daylight.hpp>
+#undef daylight  // Needed for compilation under MSVC
 
 PYBIND11_MODULE(daylight, m) {
   py::class_<Sunclock>(m, "Sunclock")
