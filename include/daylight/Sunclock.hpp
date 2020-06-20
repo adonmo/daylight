@@ -92,10 +92,10 @@ private:
    *
    * @param t
    * @param time_of_day percentage past midnight, i.e. noon is 0.5
-   * @param timezone    in hours, east is positive, i.e. IST (+05:30) is 5.5
+   * @param tz_offset   in hours, east is positive, i.e. IST (+05:30) is 5.5
    * @return julian day
    */
-  static double julian_day(struct tm *t, double const &time_of_day, double const &timezone);
+  static double julian_day(struct tm *t, double const &time_of_day, double const &tz_offset);
 
   /**
    * Extract information in a suitable format from a time_t object.
