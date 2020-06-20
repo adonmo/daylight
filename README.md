@@ -33,27 +33,31 @@ daylight's python bindings provide **vectorized functions** - allowing for effic
 
 ⚠️ Currently this library is only tested for basic use cases. For any scientific-grade use cases, or for cases where precise values are needed - this library is not extensively tested, yet. Any contributions from that aspect would be greatly appreciated.
 
-# Installation
-
-## From [PyPI](https://pypi.org/project/daylight/)
-```sh
-$ pip install daylight
-```
-
-## From source
-```sh
-$ pip install git+https://github.com/adonmo/daylight
-```
-
-Note: This requires cmake and pybind11 to be installed on your system. If you're having trouble with pybind11, [try using a conda enviroment](https://github.com/pybind/pybind11/issues/1379#issuecomment-468933426) instead.
-
 # Examples
 
 The examples directory contains a real world usage of this library at [Adonmo](https://www.adonmo.com) - for its season and location independent brightness control mechanism: [Click here](/examples/adonmo-daylight-brightness-control.ipynb) to read it.
 
 ![Adonmo brightness control mechanism using daylight](/static/adonmo-daylight-brightness-control.png)
 
-# Usage (Python)
+# Usage
+
+## Python
+
+### Installation
+
+#### From [PyPI](https://pypi.org/project/daylight/)
+```sh
+$ pip install daylight
+```
+
+#### From source
+```sh
+$ pip install git+https://github.com/adonmo/daylight
+```
+
+Note: This requires cmake and pybind11 to be installed on your system. If you're having trouble with pybind11, [try using a conda enviroment](https://github.com/pybind/pybind11/issues/1379#issuecomment-468933426) instead.
+
+#### Code sample
 
 ```python
 import datetime
@@ -94,10 +98,47 @@ sun.irradiance([
     epoch(2020, 5, 21, 7, 0, 0, tz),
 ])
 ```
+#### Documentation
+API Reference can be found here: https://adonmo-daylight.readthedocs.io/en/latest/reference.html
 
-Python API Reference and comparision with other libraries can be found on our docs: https://adonmo-daylight.readthedocs.io/en/latest/
+#### Related projects
 
-# Usage (C)
+[PyEphem](https://github.com/brandon-rhodes/pyephem), [pvlib-python](https://github.com/pvlib/pvlib-python) and [solarpy](https://github.com/aqreed/solarpy) are some libraries which have overlap with the type of problems this library solves.
+
+Comparision between them and this library can be [read on our docs](https://adonmo-daylight.readthedocs.io/en/latest/similar-libraries.html)
+
+## C++
+
+```cpp
+#include <iostream>
+#include <daylight/Sunclock.hpp>
+
+using namespace std;
+
+
+int main() {
+    // Coordinates and Timezone offsets for Hyderabad
+    Sunclock sun(17.3859, 78.4867, 5.5);
+
+    // Unix timestamp for 2020-5-21 14:10:35
+    auto irradiance = sun.irradiance(1590050435);
+
+    // Since we gave afternoon - we should expect a value close to 1
+    cout << irradiance << endl; // Returns 0.882754
+
+    return 0;
+}
+```
+
+### Example
+
+A minimal C++ app example: https://github.com/adonmo/libdaylight-cpp-example
+
+### Documentation
+
+C++ API Reference: https://adonmo.github.io/daylight/
+
+## C
 
 libdaylight can also be used in C through the provided C API.
 
@@ -128,12 +169,6 @@ $ g++ -L/<path_to_daylight>/build/capi main.o -l:libdaylight_c.so -o main
 $ LD_LIBRARY_PATH=/<path_to_daylight>/build/capi ./main
 0.882754
 ```
-
-# API Reference
-
-Python: https://adonmo-daylight.readthedocs.io/en/latest/reference.html
-
-C++: https://adonmo.github.io/daylight/
 
 # Development
 
@@ -203,9 +238,3 @@ Issues and pull requests are welcome.
 * For proposing new features/improvements or reporting bugs, [create an issue](https://github.com/adonmo/daylight/issues/new/choose).
 * Check [open issues](https://github.com/adonmo/daylight/issues) for viewing existing ideas, verify if it is already proposed/being worked upon.
 * When implementing new features make sure to add relavant tests and documentation before sending pull requests.
-
-## Related projects
-
-[PyEphem](https://github.com/brandon-rhodes/pyephem), [pvlib-python](https://github.com/pvlib/pvlib-python) and [solarpy](https://github.com/aqreed/solarpy) are some libraries which have overlap with the type of problems this library solves.
-
-Comparision between them and this library can be [read on our docs](https://adonmo-daylight.readthedocs.io/en/latest/similar-libraries.html)
