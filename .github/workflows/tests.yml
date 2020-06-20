@@ -38,11 +38,3 @@ jobs:
       working-directory: ${{runner.workspace}}/daylight/build/test
       shell: bash
       run: ctest --output-on-failure -C $BUILD_TYPE
-
-    - name: Test python bindings
-      working-directory: ${{runner.workspace}}/daylight/test/python
-      shell: bash
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install pytest pytz numpy
-        python test.py

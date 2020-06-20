@@ -27,7 +27,7 @@ jobs:
       - name: Build
         shell: bash
         run: |
-          python -m pip install sphinx sphinx_rtd_theme numpy numpydoc
+          python -m pip install .[docs]
           cmake -B build/docs -S documentation -DCMAKE_BUILD_TYPE=$BUILD_TYPE
           cmake --build build/docs --config $BUILD_TYPE
 

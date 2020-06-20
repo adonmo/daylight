@@ -16,11 +16,6 @@ CPMAddPackage(
 )
 
 CPMAddPackage(
-  NAME daylight
-  SOURCE_DIR "${DAYLIGHT_ROOT}/pybind"
-)
-
-CPMAddPackage(
   NAME StableCoder-cmake-scripts
   GITHUB_REPOSITORY StableCoder/cmake-scripts
   GIT_TAG 3d2d5a9fb26f0ce24e3e4eaeeff686ec2ecfb3fb
@@ -28,25 +23,17 @@ CPMAddPackage(
 
 # ---- Setup targets for python docs ----
 
-set(PYTHONPATH "${DAYLIGHT_ROOT}" "${CMAKE_BINARY_DIR}/_deps/daylight-build")
-
-if (NOT DEFINED MSVC)
-    string(REPLACE ";" ":" PYTHONPATH "${PYTHONPATH}")
-endif()
-
 add_custom_target(
     pydocs
-    ${CMAKE_COMMAND} -E env "PYTHONPATH=${PYTHONPATH}" make html
+    make html
     WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/python"
 )
-add_dependencies(pydocs daylight)
 
 add_custom_target(
     pydoctest
-    ${CMAKE_COMMAND} -E env "PYTHONPATH=${PYTHONPATH}" make doctest
+    make doctest
     WORKING_DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/python"
 )
-add_dependencies(pydoctest daylight)
 
 # ---- Doxygen ----
 

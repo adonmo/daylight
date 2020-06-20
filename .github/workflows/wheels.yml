@@ -28,11 +28,12 @@ jobs:
 
     - name: Build wheels
       env:
-        CIBW_BEFORE_BUILD: pip install cmake
         # Skip building on Python 2.7 on all platforms
         # Additionally, skip 32-bit Windows for now as MSVC needs seperate setup with different toolchain to do this
         # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
         CIBW_SKIP: cp27-* pp27-* *-win32
+        CIBW_BEFORE_TEST: pip install -r test/python/requirements.txt
+        CIBW_TEST_COMMAND: python {project}/test/python/test.py
       run: |
         python -m cibuildwheel --output-dir dist
 

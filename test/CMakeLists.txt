@@ -24,15 +24,10 @@ CPMAddPackage(
 
 if (TEST_INSTALLED_VERSION)
   find_package(libdaylight REQUIRED)
-  find_package(daylight REQUIRED)
 else()
   CPMAddPackage(
     NAME libdaylight
     SOURCE_DIR "${DAYLIGHT_ROOT}"
-  )
-  CPMAddPackage(
-    NAME daylight
-    SOURCE_DIR "${DAYLIGHT_ROOT}/pybind"
   )
 endif()
 

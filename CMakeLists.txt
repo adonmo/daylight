@@ -11,7 +11,7 @@ project(
 file(STRINGS VERSION LIBDAYLIGHT_VERSION)
 set(PROJECT_VERSION ${LIBDAYLIGHT_VERSION})
 
-message(${LIBDAYLIGHT_VERSION})
+message("daylight v${LIBDAYLIGHT_VERSION}")
 
 # ---- Include guards ----
 
