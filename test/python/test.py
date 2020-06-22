@@ -1,12 +1,13 @@
 import datetime
 import pytest
 import pytz
+import time
 
 import daylight
 
 
 def epoch(year, month, day, hour=0, minute=0, second=0, tz=pytz.UTC):
-    return int(tz.localize(datetime.datetime(year, month, day, hour, minute, second)).timestamp())
+    return time.mktime(tz.localize(datetime.datetime(year, month, day, hour, minute, second)).timetuple())
 
 
 def run_tests():
