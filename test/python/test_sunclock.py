@@ -7,7 +7,8 @@ import daylight
 
 
 def epoch(year, month, day, hour=0, minute=0, second=0, tz=pytz.UTC):
-    return time.mktime(tz.localize(datetime.datetime(year, month, day, hour, minute, second)).timetuple())
+    dt = tz.localize(datetime.datetime(year, month, day, hour, minute, second))
+    return (dt - datetime.datetime(1970, 1, 1, tzinfo=pytz.UTC)).total_seconds()
 
 
 def test_all_functions():
