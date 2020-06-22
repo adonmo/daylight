@@ -10,12 +10,12 @@ def epoch(year, month, day, hour=0, minute=0, second=0, tz=pytz.UTC):
     return time.mktime(tz.localize(datetime.datetime(year, month, day, hour, minute, second)).timetuple())
 
 
-def run_tests():
+def test_all_functions():
     tz = pytz.timezone("Asia/Kolkata")
     tz_offset = tz.utcoffset(datetime.datetime.utcnow()).total_seconds() / 3600
 
     sun = daylight.Sunclock(17.3859, 78.4867, tz_offset)
-    assert sun.irradiance(epoch(2020, 5, 21, 14, 10, 35, tz)) == pytest.approx(0.882753920406182)
+    assert sun.irradiance(epoch(2020, 5, 21, 14, 10, 35, tz)) == pytest.approx(0.882754)
     assert sun.sunrise(epoch(2020, 5, 21, tz=tz)) == epoch(2020, 5, 21, 5, 42, 41, tz)
     assert sun.solar_noon(epoch(2020, 5, 21, tz=tz)) == epoch(2020, 5, 21, 12, 12, 34, tz)
     assert sun.sunset(epoch(2020, 5, 21, tz=tz)) == epoch(2020, 5, 21, 18, 42, 28, tz)
@@ -39,8 +39,3 @@ def run_tests():
         -0.49458177,
         -0.79117714,
     ]))
-
-
-if __name__ == "__main__":
-    run_tests()
-    print("All tests passed")

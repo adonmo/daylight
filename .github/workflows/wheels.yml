@@ -33,7 +33,7 @@ jobs:
         # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
         CIBW_SKIP: pp*-macosx-* *-win32
         CIBW_BEFORE_TEST: pip install -r test/python/requirements.txt
-        CIBW_TEST_COMMAND: python {project}/test/python/test.py
+        CIBW_TEST_COMMAND: pytest {project}/test/python
       run: |
         python -m cibuildwheel --output-dir dist
 
