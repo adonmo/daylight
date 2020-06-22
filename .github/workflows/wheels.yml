@@ -28,10 +28,11 @@ jobs:
 
     - name: Build wheels
       env:
-        # Skipping: Windows (32-bit) and PyPy (Mac OS)
-        # Windows (32-bit) needs seperate setup with different toolchain to do this
-        # Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
-        CIBW_SKIP: pp*-macosx-* *-win32
+        # Skipping:
+        #   - PyPy (Mac OS): We get the runtime error "init_dgelsd failed init"
+        #   - Windows (32-bit) and Python 2.7
+        #       Refer: https://cibuildwheel.readthedocs.io/en/stable/cpp_standards/#windows-and-python-27
+        CIBW_SKIP: pp*-macosx* cp27-win* *-win32
         CIBW_BEFORE_TEST: pip install -r test/python/requirements.txt
         CIBW_TEST_COMMAND: pytest {project}/test/python
       run: |
