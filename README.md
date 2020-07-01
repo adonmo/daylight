@@ -55,9 +55,7 @@ $ pip install daylight
 $ pip install git+https://github.com/adonmo/daylight
 ```
 
-Note: This requires cmake and pybind11 to be installed on your system. If you're having trouble with pybind11, [try using a conda enviroment](https://github.com/pybind/pybind11/issues/1379#issuecomment-468933426) instead.
-
-#### Code sample
+### Code sample
 
 ```python
 import datetime
